@@ -19,6 +19,6 @@ public record TransactionDTO(
         transaction.getDate(),
         transaction.getCategory(),
         PaymentDTO.fromPayment(transaction.getPayment()),
-        PaymentDTO.fromDebt(transaction.getDebts()));
+        PaymentDTO.fromDebts(transaction.getDebts()));
   }
 }

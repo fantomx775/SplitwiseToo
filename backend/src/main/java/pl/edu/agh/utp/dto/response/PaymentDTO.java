@@ -10,7 +10,7 @@ public record PaymentDTO(UserDTO user, double amount) {
     return new PaymentDTO(UserDTO.fromUser(payment.getUser()), payment.getAmount());
   }
 
-  public static List<PaymentDTO> fromDebt(List<Debt> debts) {
+  public static List<PaymentDTO> fromDebts(List<Debt> debts) {
     return debts.stream()
         .map(debt -> new PaymentDTO(UserDTO.fromUser(debt.getUser()), debt.getAmount()))
         .toList();

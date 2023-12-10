@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.utp.dto.request.TransactionRequest;
 import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
+import pl.edu.agh.utp.dto.response.TransactionDTO;
 import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.repository.GroupRepository;
@@ -14,6 +16,8 @@ import pl.edu.agh.utp.repository.GroupRepository;
 public class GroupService {
   private final GroupRepository groupRepository;
 
+  private final TransactionService transactionService;
+
   public Optional<Group> getGroupById(Long id) {
     return groupRepository.findById(id);
   }
@@ -22,14 +26,15 @@ public class GroupService {
     return groupRepository.findAllTransactionsByGroupId(groupId);
   }
 
-  public Optional<Transaction> addTransactionToGroup(Long groupId, Transaction transaction) {
+  public Optional<TransactionDTO> addTransactionToGroup(Long groupId, TransactionRequest transaction) {
     return groupRepository
         .findById(groupId)
         .map(
             group -> {
-              group.getTransactions().add(transaction);
+              var transactionToSave = transactionService.createTransactionFromRequest(transaction);
+              group.getTransactions().add(transactionToSave);
               groupRepository.save(group);
-              return transaction;
+              return TransactionDTO.fromTransaction(transactionToSave);
             });
   }
 }
