@@ -26,12 +26,12 @@ public class GroupService {
   private final TransactionService transactionService;
 
   public GroupDTO createGroup(GroupRequest request) {
-      Optional<User> userOpt = userRepository.findById(request.userId());
-      ArrayList<User> users = new ArrayList<>();
-      users.add(userOpt.get()); // TODO idk if it's done properly
-      ArrayList<Transaction> transactions = new ArrayList<>();
-      Group group = new Group(request.name(), users, transactions);
-      return GroupDTO.fromGroup(groupRepository.save(group));
+    Optional<User> userOpt = userRepository.findById(request.userId());
+    ArrayList<User> users = new ArrayList<>();
+    users.add(userOpt.get()); // TODO idk if it's done properly
+    ArrayList<Transaction> transactions = new ArrayList<>();
+    Group group = new Group(request.name(), users, transactions);
+    return GroupDTO.fromGroup(groupRepository.save(group));
   }
 
   public Optional<Group> getGroupById(Long id) {
@@ -42,7 +42,8 @@ public class GroupService {
     return groupRepository.findAllTransactionsByGroupId(groupId);
   }
 
-  public Optional<TransactionDTO> addTransactionToGroup(Long groupId, TransactionRequest transaction) {
+  public Optional<TransactionDTO> addTransactionToGroup(
+      Long groupId, TransactionRequest transaction) {
     return groupRepository
         .findById(groupId)
         .map(

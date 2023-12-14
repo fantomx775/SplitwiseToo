@@ -1,8 +1,11 @@
 package pl.edu.agh.utp.api
 
+import pl.edu.agh.utp.model.LoginRequest
+import pl.edu.agh.utp.model.RegisterRequest
 import pl.edu.agh.utp.model.SimpleTransaction
 import pl.edu.agh.utp.model.Transaction
 import pl.edu.agh.utp.model.TransactionRequest
+import pl.edu.agh.utp.model.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,4 +25,10 @@ interface ApiService {
         @Path("id") groupId: Long,
         @Body transaction: TransactionRequest
     ): Call<Transaction>
+
+    @POST("/user/login")
+    fun loginUser(@Body loginRequest: LoginRequest): Call<User>
+
+    @POST("/user/create")
+    fun registerUser(@Body registerRequest: RegisterRequest): Call<User>
 }

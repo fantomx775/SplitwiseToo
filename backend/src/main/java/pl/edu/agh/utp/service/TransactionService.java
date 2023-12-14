@@ -23,20 +23,26 @@ public class TransactionService {
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
 
-
-  public Optional<TransactionDTO> findTransactionById(Long transactionId) {
-    return transactionRepository.findById(transactionId).map(TransactionDTO::fromTransaction);
+  public Optional<TransactionDTO> findTransactionById(Long id) {
+    return transactionRepository.findById(id).map(TransactionDTO::fromTransaction);
   }
 
   public Transaction createTransactionFromRequest(TransactionRequest transactionRequest) {
-      Category category = categoryRepository.findById(transactionRequest.categoryId()).orElseThrow();
-      Payment payment = new Payment(userRepository.findById(transactionRequest.paymentUserId()).orElseThrow(), transactionRequest.amount());
-      double amountToPay = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
+    Category category = categoryRepository.findById(transactionRequest.categoryId()).orElseThrow();
+    Payment payment =
+        new Payment(
+            userRepository.findById(transactionRequest.paymentUserId()).orElseThrow(),
+            transactionRequest.amount());
+    double amountToPay = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
 
-    List<Debt> debts = transactionRequest.debtsUserIds().stream()
-            .map(userId -> new Debt(userRepository.findById(userId).orElseThrow(), amountToPay)).toList();
+    List<Debt> debts =
+        transactionRequest.debtsUserIds().stream()
+            .map(userId -> new Debt(userRepository.findById(userId).orElseThrow(), amountToPay))
+            .toList();
 
-      Transaction transaction = new Transaction(transactionRequest.description(), transactionRequest.date(), category, payment, debts);
-      return transactionRepository.save(transaction);
+    Transaction transaction =
+        new Transaction(
+            transactionRequest.description(), transactionRequest.date(), category, payment, debts);
+    return transactionRepository.save(transaction);
   }
 }
