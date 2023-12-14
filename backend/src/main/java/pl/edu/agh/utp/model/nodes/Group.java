@@ -18,12 +18,4 @@ public class Group {
 
   @Relationship(type = "CONTAINS_TRANSACTION", direction = Relationship.Direction.OUTGOING)
   private final List<Transaction> transactions;
-
-  public void addUser(User user) {
-    users.add(user);
-  }
-
-  public void addTransaction(Transaction transaction) {
-    transactions.add(transaction);
-  }
 }

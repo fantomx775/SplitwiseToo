@@ -1,5 +1,7 @@
 package pl.edu.agh.utp.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import lombok.Data;
@@ -33,7 +35,7 @@ public class TransactionService {
         new Payment(
             userRepository.findById(transactionRequest.paymentUserId()).orElseThrow(),
             transactionRequest.amount());
-    double amountToPay = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
+    double amountToPay = getAmountToPay(transactionRequest);
 
     List<Debt> debts =
         transactionRequest.debtsUserIds().stream()
@@ -44,5 +46,15 @@ public class TransactionService {
         new Transaction(
             transactionRequest.description(), transactionRequest.date(), category, payment, debts);
     return transactionRepository.save(transaction);
+  }
+
+  private double getAmountToPay(TransactionRequest transactionRequest) {
+    var amount = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
+
+    return round(amount, 2);
+  }
+
+  private double round(double value, int places) {
+    return new BigDecimal(value).setScale(places, RoundingMode.DOWN).doubleValue();
   }
 }

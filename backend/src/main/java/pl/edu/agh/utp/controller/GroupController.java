@@ -22,7 +22,11 @@ public class GroupController {
 
   @PostMapping("/create")
   public ResponseEntity<GroupDTO> createGroup(@RequestBody GroupRequest request) {
-    return ResponseEntity.ok(groupService.createGroup(request));
+    return ResponseEntity.ok(
+        groupService
+            .createGroup(request)
+            .orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
   }
 
   @GetMapping("/{id}/transactions")

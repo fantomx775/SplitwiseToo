@@ -13,8 +13,8 @@ import pl.edu.agh.utp.model.relationships.Payment;
 @Data
 public class Transaction {
   @Id @GeneratedValue private Long id;
-  private final String date;
   private final String description;
+  private final String date;
 
   @Relationship(type = "IS_OF_CATEGORY", direction = Relationship.Direction.OUTGOING)
   private final Category category;
