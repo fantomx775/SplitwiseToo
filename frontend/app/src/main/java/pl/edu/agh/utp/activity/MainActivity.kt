@@ -7,6 +7,7 @@ import pl.edu.agh.utp.GroupsFragment
 import pl.edu.agh.utp.ProfileFragment
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.SettingsFragment
+import pl.edu.agh.utp.TransactionsFragment
 import pl.edu.agh.utp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

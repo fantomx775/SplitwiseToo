@@ -9,6 +9,6 @@ import pl.edu.agh.utp.model.nodes.Group;
 
 public interface GroupRepository extends Neo4jRepository<Group, Long> {
   @Query(
-      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE ID(g) = $groupId RETURN ID(t) AS id, t.description AS description, t.date AS date")
+      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE ID(g) = $groupId RETURN ID(t) AS transactionId, t.description AS description, t.date AS date")
   List<SimpleTransactionDTO> findAllTransactionsByGroupId(@Param("groupId") Long groupId);
 }

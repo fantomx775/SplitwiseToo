@@ -43,8 +43,7 @@ class TransactionsAdapter(private val groupId: Long,private val clickListener: T
         holder.itemView.findViewById<TextView>(R.id.textViewDate).text = transaction.date.toString()
 
         holder.itemView.setOnClickListener {
-            val transaction = transactions[position]
-            clickListener.onTransactionClick(transaction.id)
+            clickListener.onTransactionClick(transaction.transactionId)
         }
     }
 

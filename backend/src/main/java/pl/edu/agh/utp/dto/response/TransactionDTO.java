@@ -5,7 +5,7 @@ import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
 
 public record TransactionDTO(
-    Long id,
+    Long transactionId,
     String description,
     String date,
     Category category,

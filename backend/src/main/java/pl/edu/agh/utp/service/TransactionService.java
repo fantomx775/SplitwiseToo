@@ -24,8 +24,8 @@ public class TransactionService {
   private final CategoryRepository categoryRepository;
 
 
-  public Optional<TransactionDTO> findTransactionById(Long id) {
-    return transactionRepository.findById(id).map(TransactionDTO::fromTransaction);
+  public Optional<TransactionDTO> findTransactionById(Long transactionId) {
+    return transactionRepository.findById(transactionId).map(TransactionDTO::fromTransaction);
   }
 
   public Transaction createTransactionFromRequest(TransactionRequest transactionRequest) {
