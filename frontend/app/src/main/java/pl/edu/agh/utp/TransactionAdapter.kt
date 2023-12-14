@@ -21,7 +21,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class TransactionsAdapter(private val groupId: Long) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
+class TransactionsAdapter(private val groupId: Long,private val clickListener: TransactionClickListener) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
 
 
     private var transactions: MutableList<SimpleTransaction> =  mutableListOf()
@@ -43,8 +43,8 @@ class TransactionsAdapter(private val groupId: Long) : RecyclerView.Adapter<Tran
         holder.itemView.findViewById<TextView>(R.id.textViewDate).text = transaction.date.toString()
 
         holder.itemView.setOnClickListener {
-            //TODO route to transaction details
-
+            val transaction = transactions[position]
+            clickListener.onTransactionClick(transaction.id)
         }
     }
 
@@ -83,6 +83,10 @@ class TransactionsAdapter(private val groupId: Long) : RecyclerView.Adapter<Tran
 //        val textViewDescription: TextView = itemView.findViewById(R.id.textViewDescription)
 //        val textViewDate: TextView = itemView.findViewById(R.id.textViewDate)
 
+    }
+
+    interface TransactionClickListener {
+        fun onTransactionClick(transactionId: Long)
     }
 }
 
