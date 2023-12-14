@@ -1,8 +1,12 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.GroupsFragment
+import pl.edu.agh.utp.ProfileFragment
+import pl.edu.agh.utp.R
+import pl.edu.agh.utp.SettingsFragment
 import pl.edu.agh.utp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,17 +23,20 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.profile -> {
-                    replaceFragment(Profile())
+                    replaceFragment(ProfileFragment())
                     true
                 }
+
                 R.id.settings -> {
-                    replaceFragment(Settigns()) // Fixed typo in "Settings"
+                    replaceFragment(SettingsFragment()) // Fixed typo in "Settings"
                     true
                 }
+
                 R.id.groups -> {
-                    replaceFragment(Groups())
+                    replaceFragment(GroupsFragment())
                     true
                 }
+
                 else -> false
             }
         }

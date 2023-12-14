@@ -1,8 +1,8 @@
 package pl.edu.agh.utp.api
 
-import pl.edu.agh.utp.model.TransactionRequest
 import pl.edu.agh.utp.model.SimpleTransaction
 import pl.edu.agh.utp.model.Transaction
+import pl.edu.agh.utp.model.TransactionRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,5 +18,8 @@ interface ApiService {
     fun getTransaction(@Path("id") transactionId: Long): Call<Transaction>
 
     @POST("group/{id}/transactions")
-    fun addTransaction(@Path("id") groupId: Long, @Body transaction: TransactionRequest): Call<Transaction>
+    fun addTransaction(
+        @Path("id") groupId: Long,
+        @Body transaction: TransactionRequest
+    ): Call<Transaction>
 }

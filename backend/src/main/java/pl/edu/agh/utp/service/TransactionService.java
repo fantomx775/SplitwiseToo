@@ -34,10 +34,9 @@ public class TransactionService {
       double amountToPay = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
 
     List<Debt> debts = transactionRequest.debtsUserIds().stream()
-            .map((Long userId) -> new Debt(userRepository.findById(userId).orElseThrow(), amountToPay)).toList();
+            .map(userId -> new Debt(userRepository.findById(userId).orElseThrow(), amountToPay)).toList();
 
       Transaction transaction = new Transaction(transactionRequest.description(), transactionRequest.date(), category, payment, debts);
-      transactionRepository.save(transaction);
-      return transaction;
+      return transactionRepository.save(transaction);
   }
 }
