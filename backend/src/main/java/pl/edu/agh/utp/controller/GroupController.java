@@ -11,7 +11,6 @@ import pl.edu.agh.utp.dto.request.TransactionRequest;
 import pl.edu.agh.utp.dto.response.GroupDTO;
 import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
 import pl.edu.agh.utp.dto.response.TransactionDTO;
-import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.service.GroupService;
 
 @RestController
