@@ -1,6 +1,7 @@
 package pl.edu.agh.utp
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,28 +13,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.activity.LoginActivity
 import pl.edu.agh.utp.manager.UserManager
 import pl.edu.agh.utp.model.User
 
-private const val ARG_NAME = "name"
-private const val ARG_EMAIL = "email"
-private const val ARG_PASSWORD = "password"
 
 class ProfileFragment : Fragment() {
-    private var name: String? = "TestName"
-    private var email: String? = "test@mail.com"
-    private var password: String? = "TestPassword"
-    private var userManager: UserManager? = null
-    private var User: User? = null
+    private var name: String = "TestName"
+    private var email: String = "test@mail.com"
+    private var password: String?= "TestPassword"
+    private lateinit var userManager: UserManager
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            name = it.getString(ARG_NAME)
-            email = it.getString(ARG_EMAIL)
-            password = it.getString(ARG_PASSWORD)
-            userManager = UserManager(requireContext())
-        }
+        userManager = UserManager(requireContext())
     }
 
     override fun onCreateView(
@@ -46,13 +40,10 @@ class ProfileFragment : Fragment() {
         view.findViewById<TextView>(R.id.textViewEmail)?.text = email
         view.findViewById<TextView>(R.id.textViewPassword)?.text = password
         view.findViewById<Button>(R.id.logoutButton)?.setOnClickListener {
-            userManager?.logOut()
-            User = userManager?.getUser()
-            if (User == null) {
-                Toast.makeText(requireContext(), "Logged out", Toast.LENGTH_SHORT).show()
-                requireActivity().finish()
-            }
-
+            userManager.logOut()
+            user = userManager.getUser()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         view.findViewById<ImageView>(R.id.editIconName)?.setOnClickListener {
@@ -114,15 +105,4 @@ class ProfileFragment : Fragment() {
         dialog.show()
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(name: String, email: String, password: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_NAME, name)
-                    putString(ARG_EMAIL, email)
-                    putString(ARG_PASSWORD, password)
-                }
-            }
-    }
 }
