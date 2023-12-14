@@ -1,5 +1,6 @@
 package pl.edu.agh.utp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -80,6 +81,7 @@ class TransactionDetailsFragment(private val transactionId: Long) : Fragment() {
             }
         })
     }
+
 
     private fun updateTransactionDetails(transaction: Transaction?) {
         transaction?.let {
