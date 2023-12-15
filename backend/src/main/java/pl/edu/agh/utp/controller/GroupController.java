@@ -11,6 +11,7 @@ import pl.edu.agh.utp.dto.request.TransactionRequest;
 import pl.edu.agh.utp.dto.response.GroupDTO;
 import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
 import pl.edu.agh.utp.dto.response.TransactionDTO;
+import pl.edu.agh.utp.dto.response.UserDTO;
 import pl.edu.agh.utp.service.GroupService;
 
 @RestController
@@ -29,6 +30,11 @@ public class GroupController {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
   }
 
+  @GetMapping("/{id}/users")
+  public ResponseEntity<List<UserDTO>> getAllUsersByGroupId(@PathVariable("id") Long groupId) {
+    return ResponseEntity.ok(groupService.getAllUsersByGroupId(groupId));
+  }
+
   @GetMapping("/{id}/transactions")
   public ResponseEntity<List<SimpleTransactionDTO>> getAllTransactionsByGroupId(
       @PathVariable("id") Long groupId) {
@@ -41,7 +47,7 @@ public class GroupController {
     return ResponseEntity.ok(
         groupService
             .addTransactionToGroup(groupId, transaction)
-            .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid group id")));
+            .getOrElseThrow(
+                (message) -> new ResponseStatusException(HttpStatus.NOT_FOUND, message)));
   }
 }

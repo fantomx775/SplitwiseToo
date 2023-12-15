@@ -35,6 +35,9 @@ dependencies {
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
+	// vavr
+	implementation 'io.vavr:vavr:0.10.4'
+
 	// lombok
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -42,7 +45,10 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
 	// neo4j
-	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+	implementation('org.springframework.boot:spring-boot-starter-data-neo4j')
+
+	// neo4j in-memory testing
+	testImplementation 'org.neo4j.test:neo4j-harness:5.14.0'
 
 	// spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'

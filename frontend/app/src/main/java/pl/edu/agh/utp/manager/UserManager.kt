@@ -17,7 +17,7 @@ class UserManager(context: Context) {
 
     fun saveUser(user: User) {
         prefs.edit().apply {
-            putLong(KEY_ID, user.id)
+            putLong(KEY_ID, user.userId)
             putString(KEY_USERNAME, user.name)
             putString(KEY_EMAIL, user.email)
             putBoolean(KEY_IS_LOGGED_IN, true)

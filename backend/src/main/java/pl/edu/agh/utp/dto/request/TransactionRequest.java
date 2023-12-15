@@ -5,7 +5,7 @@ import java.util.List;
 public record TransactionRequest(
     String description,
     String date,
-    Long categoryId,
+    String category,
     double amount,
     Long paymentUserId,
     List<Long> debtsUserIds) {}

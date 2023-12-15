@@ -1,5 +1,6 @@
 package pl.edu.agh.utp.service;
 
+import io.vavr.control.Either;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import pl.edu.agh.utp.dto.request.TransactionRequest;
 import pl.edu.agh.utp.dto.response.GroupDTO;
 import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
 import pl.edu.agh.utp.dto.response.TransactionDTO;
+import pl.edu.agh.utp.dto.response.UserDTO;
 import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.repository.GroupRepository;
 import pl.edu.agh.utp.repository.UserRepository;
@@ -37,16 +39,27 @@ public class GroupService {
     return groupRepository.findAllTransactionsByGroupId(groupId);
   }
 
-  public Optional<TransactionDTO> addTransactionToGroup(
-      Long groupId, TransactionRequest transaction) {
+  public List<UserDTO> getAllUsersByGroupId(Long groupId) {
+    return groupRepository.findAllUsersByGroupId(groupId);
+  }
+
+  public Either<String, TransactionDTO> addTransactionToGroup(
+      Long groupId, TransactionRequest transactionRequest) {
     return groupRepository
         .findById(groupId)
         .map(
             group -> {
-              var transactionToSave = transactionService.createTransactionFromRequest(transaction);
-              group.getTransactions().add(transactionToSave);
-              groupRepository.save(group);
-              return TransactionDTO.fromTransaction(transactionToSave);
-            });
+              var transactionEither =
+                  transactionService.createTransactionFromRequest(transactionRequest);
+              return transactionEither
+                  .map(
+                      transaction -> {
+                        group.getTransactions().add(transaction);
+                        groupRepository.save(group);
+                        return TransactionDTO.fromTransaction(transaction);
+                      })
+                  .orElse(() -> Either.left(transactionEither.getLeft()));
+            })
+        .orElse(Either.left("Invalid group userId"));
   }
 }

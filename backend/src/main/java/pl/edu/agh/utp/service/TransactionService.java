@@ -1,5 +1,6 @@
 package pl.edu.agh.utp.service;
 
+import io.vavr.control.Either;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -10,6 +11,7 @@ import pl.edu.agh.utp.dto.request.TransactionRequest;
 import pl.edu.agh.utp.dto.response.TransactionDTO;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
+import pl.edu.agh.utp.model.nodes.User;
 import pl.edu.agh.utp.model.relationships.Debt;
 import pl.edu.agh.utp.model.relationships.Payment;
 import pl.edu.agh.utp.repository.CategoryRepository;
@@ -29,23 +31,36 @@ public class TransactionService {
     return transactionRepository.findById(id).map(TransactionDTO::fromTransaction);
   }
 
-  public Transaction createTransactionFromRequest(TransactionRequest transactionRequest) {
-    Category category = categoryRepository.findById(transactionRequest.categoryId()).orElseThrow();
-    Payment payment =
-        new Payment(
-            userRepository.findById(transactionRequest.paymentUserId()).orElseThrow(),
-            transactionRequest.amount());
+  public Either<String, Transaction> createTransactionFromRequest(
+      TransactionRequest transactionRequest) {
+    Optional<Category> category = categoryRepository.findByName(transactionRequest.category());
+    if (category.isEmpty()) {
+      return Either.left("Category not found");
+    }
+    Optional<User> paymentUser = userRepository.findById(transactionRequest.paymentUserId());
+    if (paymentUser.isEmpty()) {
+      return Either.left("Payment user not found");
+    }
+
+    List<User> debtsUsers = userRepository.findAllById(transactionRequest.debtsUserIds());
+    if (debtsUsers.size() != transactionRequest.debtsUserIds().size()) {
+      return Either.left("Debts users not found");
+    }
+
+    Payment payment = new Payment(paymentUser.get(), transactionRequest.amount());
+
     double amountToPay = getAmountToPay(transactionRequest);
 
-    List<Debt> debts =
-        transactionRequest.debtsUserIds().stream()
-            .map(userId -> new Debt(userRepository.findById(userId).orElseThrow(), amountToPay))
-            .toList();
+    List<Debt> debts = debtsUsers.stream().map(user -> new Debt(user, amountToPay)).toList();
 
     Transaction transaction =
         new Transaction(
-            transactionRequest.description(), transactionRequest.date(), category, payment, debts);
-    return transactionRepository.save(transaction);
+            transactionRequest.description(),
+            transactionRequest.date(),
+            category.get(),
+            payment,
+            debts);
+    return Either.right(transactionRepository.save(transaction));
   }
 
   private double getAmountToPay(TransactionRequest transactionRequest) {

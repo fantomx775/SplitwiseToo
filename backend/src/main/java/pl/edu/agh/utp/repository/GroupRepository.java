@@ -5,10 +5,15 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
+import pl.edu.agh.utp.dto.response.UserDTO;
 import pl.edu.agh.utp.model.nodes.Group;
 
 public interface GroupRepository extends Neo4jRepository<Group, Long> {
   @Query(
       "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE ID(g) = $groupId RETURN ID(t) AS transactionId, t.description AS description, t.date AS date")
   List<SimpleTransactionDTO> findAllTransactionsByGroupId(@Param("groupId") Long groupId);
+
+  @Query(
+      "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE ID(g) = $groupId RETURN ID(u) AS userId, u.name  AS name, u.email AS email")
+  List<UserDTO> findAllUsersByGroupId(@Param("groupId") Long groupId);
 }
