@@ -1,13 +1,11 @@
 package pl.edu.agh.utp.api
 
-import pl.edu.agh.utp.model.User
-import pl.edu.agh.utp.model.Group
-import pl.edu.agh.utp.model.GroupRequest
 import pl.edu.agh.utp.model.LoginRequest
 import pl.edu.agh.utp.model.RegisterRequest
 import pl.edu.agh.utp.model.SimpleTransaction
 import pl.edu.agh.utp.model.Transaction
 import pl.edu.agh.utp.model.TransactionRequest
+import pl.edu.agh.utp.model.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -15,6 +13,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
+
+    @GET("user/{groupId}/users")
+    fun getUsersFromGroup(@Path("groupId") groupId: Long): Call<List<User>>
 
     @POST("group/create")
     fun createGroup(@Body groupCreationRequest: GroupRequest): Call<Group>
