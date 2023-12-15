@@ -1,12 +1,11 @@
 package pl.edu.agh.utp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -63,7 +62,7 @@ class TransactionsFragment( private val groupId:Long) : Fragment(),
     }
 
     private fun navigateToAddTransactionFragment() {
-        val fragment = AddTransactionFragment()
+        val fragment = AddTransactionFragment(groupId)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)

@@ -30,8 +30,8 @@ interface ApiService {
 
     @POST("group/{id}/transactions")
     fun addTransaction(
-        @Path("id") groupId: Long,
-        @Body transaction: TransactionRequest
+            @Path("id") groupId: Long,
+            @Body transaction: TransactionRequest
     ): Call<Transaction>
 
     @POST("/user/login")
