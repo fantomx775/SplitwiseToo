@@ -53,7 +53,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
 
     private fun fetchUserGroups() {
         if (UserManager(requireContext()).isLoggedIn()) {
-            val userId: Long = UserManager(requireContext()).getUser()?.id!!
+            val userId: Long = UserManager(requireContext()).getUser()?.userId!!
             groupAdapter.fetchUserGroups(userId)
         }
     }

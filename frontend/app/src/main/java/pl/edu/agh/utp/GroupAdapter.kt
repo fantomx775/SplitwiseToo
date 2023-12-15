@@ -32,10 +32,10 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         val group = groupList[position]
 
         holder.itemView.setOnClickListener {
-            clickListener.onGroupClick(group.id)
+            clickListener.onGroupClick(group.groupId)
         }
 
-        holder.group_id.text = group.id.toString()
+        holder.group_id.text = group.groupId.toString()
         holder.group_name.text = group.name
     }
 

@@ -31,10 +31,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
     }
 
 
-    private var people: MutableMap<Long, PersonInfo> = mutableMapOf(
-        11L to PersonInfo("Mike", false),
-        12L to PersonInfo("Anna", false)
-    )
+    private var people: MutableMap<Long, PersonInfo> = mutableMapOf()
 
     private var category: String = ""
     private var description: String = ""
@@ -56,7 +53,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
 
         user = userManager.getUser()
         fetchGroupUsers(groupId)
-        people.remove(user?.id)
+        people.remove(user?.userId)
 
         val view = inflater.inflate(R.layout.fragment_add_transaction, container, false)
         val peopleLinearLayout: ViewGroup = view.findViewById(R.id.linearLayoutPeople)
@@ -142,7 +139,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
             todaysDate.toString(),
             category,
             amount,
-            user?.id!!,
+            user?.userId!!,
             debtsUserIds
         )
 
@@ -158,19 +155,22 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
 
     private fun preparePeopleHashMap(users: List<User>) {
         for (user in users) {
-            people[user.id] = PersonInfo(user.name, false)
+            people[user.userId] = PersonInfo(user.name, false)
         }
     }
 
     private fun fetchGroupUsers(groupId: Long) {
+        Log.d("AddTransactionFragment","groupid: ${groupId.toString()}")
         ApiObject.instance.getUsersFromGroup(groupId).enqueue(object : Callback<List<User>> {
             override fun onResponse(
                 call: Call<List<User>>,
                 response: Response<List<User>>
             ) {
                 if (response.isSuccessful) {
+
                     var users = response.body()!!
                     Log.d("AddTransactionFragment", "Users: $users")
+
                     preparePeopleHashMap(users)
                 } else {
                     Log.d("AddTransactionFragment", "Error: ${response.code()}")

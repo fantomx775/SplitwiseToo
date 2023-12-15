@@ -29,7 +29,7 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
 
     private fun createGroup() {
         val groupName: String = view?.findViewById<View>(R.id.name_input).toString()
-        val userId: Long = UserManager(requireContext()).getUser()?.id!!
+        val userId: Long = UserManager(requireContext()).getUser()?.userId!!
         groupAdapter.createGroup(groupName, userId)
     }
 }

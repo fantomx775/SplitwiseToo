@@ -1,5 +1,7 @@
 package pl.edu.agh.utp.api
 
+import pl.edu.agh.utp.model.Group
+import pl.edu.agh.utp.model.GroupRequest
 import pl.edu.agh.utp.model.LoginRequest
 import pl.edu.agh.utp.model.RegisterRequest
 import pl.edu.agh.utp.model.SimpleTransaction
