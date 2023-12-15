@@ -19,3 +19,8 @@ Change Log:
     - dodawanie nowej grupy (błąd z nazwą)
     - dodwanie user'a do grupy (nie ma)
     - dodwanie user'ów do transkacji (nie działa endpoint)
+4. Działa:
+	- logowanie i rejestracja
+    - wyswietlanie grup zalogowanego usera
+    - wyswietlanie wszystkich transakcji w grupie
+    - wyswietlanie szczzegółów transakcji
