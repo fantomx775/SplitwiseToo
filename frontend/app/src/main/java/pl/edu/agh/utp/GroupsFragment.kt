@@ -34,9 +34,14 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
         groupAdapter = GroupAdapter(this)
         recyclerView.adapter = groupAdapter
 
-        fetchUserGroups()
+//        fetchUserGroups()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchUserGroups()
     }
 
 //    private fun fetchUserGroups(userId: Long) {
@@ -56,7 +61,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
     private fun navigateToAddGroupFragment() {
         val addGroupFragment = AddGroupFragment(groupAdapter) // TODO: remove passing adapter once dependency injection works
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.groups_recycler_view, addGroupFragment)
+        transaction.replace(R.id.frameLayout, addGroupFragment)
         transaction.addToBackStack(null) // TODO: ability to return to previous view
         transaction.commit()
     }
@@ -64,7 +69,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
     private fun navigateToTransactionsFragment(groupId: Long) {
         val transactionFragment = TransactionsFragment(groupId)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.groups_recycler_view, transactionFragment)
+        transaction.replace(R.id.frameLayout, transactionFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
