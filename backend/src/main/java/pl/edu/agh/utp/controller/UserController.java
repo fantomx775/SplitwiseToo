@@ -20,8 +20,8 @@ public class UserController {
 
   private final UserService userService;
 
-  @GetMapping("/groups")
-  public ResponseEntity<List<GroupDTO>> getUserGroups(@RequestBody Long userId) {
+  @GetMapping("{id}/groups")
+  public ResponseEntity<List<GroupDTO>> getUserGroups(@PathVariable("id") Long userId) {
     return ResponseEntity.ok(userService.findGroupsByUserId(userId));
   }
 
