@@ -16,6 +16,9 @@ import retrofit2.http.Path
 
 interface ApiService {
 
+    @POST("group/{id}/user")
+    fun addUsersToGroup(@Path("id") groupId: Long, @Body userIds: List<String>): Call<Group>
+
     @GET("group/{id}/users")
     fun getUsersFromGroup(@Path("id") groupId: Long): Call<List<User>>
 

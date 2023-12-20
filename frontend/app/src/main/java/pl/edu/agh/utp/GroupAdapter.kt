@@ -1,17 +1,15 @@
 package pl.edu.agh.utp
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.model.Group
 import pl.edu.agh.utp.model.GroupRequest
-import pl.edu.agh.utp.model.User
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,23 +80,42 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         })
     }
 
-    fun createGroup(groupName: String, userId: Long) {
+    @SuppressLint("NotifyDataSetChanged")
+    suspend fun createGroup(groupName: String, userId: Long, onGroupCreated: (Long) -> Unit) {
         val groupRequest = GroupRequest(groupName, userId)
+        try{
+            val response = apiService.createGroup(groupRequest).execute()
+            if (response.isSuccessful) {
+                Log.i("CreateGroup", "Success: ${response.body()}")
+                val createdGroup = response.body()
+                if (createdGroup != null) {
+                    groupList.add(createdGroup)
+                }
+                notifyDataSetChanged()
+                onGroupCreated(createdGroup!!.groupId)
+            } else {
+                Log.e("CreateGroup", "Error: ${response.code()}")
+            }
+        }catch (e: Exception){
+            Log.e("CreateGroup", "Error: ${e.message}")
+        }
+    }
 
-        apiService.createGroup(groupRequest).enqueue(object : Callback<Group> {
+    suspend fun addUsersToGroup(groupId: Long ,emailList: MutableList<String>) {
+        apiService.addUsersToGroup(groupId, emailList).enqueue(object : Callback<Group> {
             override fun onResponse(
                 call: Call<Group>,
                 response: Response<Group>
             ) {
                 if (response.isSuccessful) {
-                    Log.i("CreateGroup", "Success: ${response.body()}")
+                    Log.i("AddUsersToGroup", "Success: ${response.body()}")
                     val createdGroup = response.body()
                     if (createdGroup != null) {
                         groupList.add(createdGroup)
                     }
                     notifyDataSetChanged()
                 } else {
-                    Log.e("CreateGroup", "Error: ${response.code()}")
+                    Log.e("AddUsersToGroup", "Error: ${response.code()}")
                 }
             }
 
@@ -106,7 +123,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
                 call: Call<Group>,
                 t: Throwable
             ) {
-                Log.e("CreateGroup", "Error: ${t.message}")
+                Log.e("AddUsersToGroup", "Error: ${t.message}")
                 t.printStackTrace()
             }
         })

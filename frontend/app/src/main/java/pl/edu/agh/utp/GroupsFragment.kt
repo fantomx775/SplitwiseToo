@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.agh.utp.manager.UserManager
-import pl.edu.agh.utp.model.Group
-import pl.edu.agh.utp.model.User
 
 class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
 

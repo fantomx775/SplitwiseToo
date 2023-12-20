@@ -26,7 +26,12 @@
             android:hint="Bulbulator..."
             android:layout_marginBottom="20dp"
             android:textSize="20sp"/>
-
+        <Button
+            android:id="@+id/add_email_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Person"
+            android:textSize="20sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,13 +39,14 @@
             android:layout_marginBottom="20dp"
             android:textSize="30sp"
             android:textStyle="bold"/>
-        <EditText
-            android:id="@+id/emails_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="john@example.com, jane@example.com, ..."
-            android:layout_marginBottom="20dp"
-            android:textSize="20sp"/>
+<!--        <EditText-->
+<!--            android:id="@+id/emails_input"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="john@example.com, jane@example.com, ..."-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:textSize="20sp"/>-->
+
 
         <!-- RecyclerView for displaying added emails -->
         <androidx.recyclerview.widget.RecyclerView
