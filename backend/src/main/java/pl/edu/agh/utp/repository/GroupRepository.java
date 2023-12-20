@@ -1,19 +1,20 @@
 package pl.edu.agh.utp.repository;
 
 import java.util.List;
+import java.util.UUID;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
-import pl.edu.agh.utp.dto.response.SimpleTransactionDTO;
-import pl.edu.agh.utp.dto.response.UserDTO;
 import pl.edu.agh.utp.model.nodes.Group;
+import pl.edu.agh.utp.model.nodes.User;
+import pl.edu.agh.utp.records.simple.SimpleTransaction;
 
-public interface GroupRepository extends Neo4jRepository<Group, Long> {
+public interface GroupRepository extends Neo4jRepository<Group, UUID> {
   @Query(
-      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE ID(g) = $groupId RETURN ID(t) AS transactionId, t.description AS description, t.date AS date")
-  List<SimpleTransactionDTO> findAllTransactionsByGroupId(@Param("groupId") Long groupId);
+      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE g.id = $groupId RETURN t.id AS transactionId, t.description AS description, t.date AS date")
+  List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
 
   @Query(
-      "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE ID(g) = $groupId RETURN ID(u) AS userId, u.name  AS name, u.email AS email")
-  List<UserDTO> findAllUsersByGroupId(@Param("groupId") Long groupId);
+      "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS userId, u.name  AS name, u.email AS email, u.password AS password")
+  List<User> findAllUsersByGroupId(@Param("groupId") UUID groupId);
 }

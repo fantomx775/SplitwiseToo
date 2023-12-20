@@ -1,37 +1,38 @@
 package pl.edu.agh.utp.controller;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.edu.agh.utp.dto.request.LoginRequest;
-import pl.edu.agh.utp.dto.request.RegisterRequest;
-import pl.edu.agh.utp.dto.response.GroupDTO;
-import pl.edu.agh.utp.dto.response.UserDTO;
 import pl.edu.agh.utp.exceptions.InvalidPasswordException;
+import pl.edu.agh.utp.records.dto.UserDTO;
+import pl.edu.agh.utp.records.request.LoginRequest;
+import pl.edu.agh.utp.records.request.RegisterRequest;
+import pl.edu.agh.utp.records.simple.SimpleGroup;
 import pl.edu.agh.utp.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 
   private final UserService userService;
 
   @GetMapping("{id}/groups")
-  public ResponseEntity<List<GroupDTO>> getUserGroups(@PathVariable("id") Long userId) {
-    return ResponseEntity.ok(userService.findGroupsByUserId(userId));
+  public List<SimpleGroup> getUserGroups(@PathVariable("id") UUID userId) {
+    return userService.findGroupsByUserId(userId);
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<UserDTO> createUser(@RequestBody RegisterRequest request) {
-    return ResponseEntity.ok(
-        userService
-            .createUser(request)
-            .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists")));
+  @PostMapping
+  public UserDTO createUser(@RequestBody RegisterRequest request) {
+    return userService
+        .createUser(request)
+        .map(UserDTO::fromUser)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists"));
   }
 
   @PostMapping("/login")

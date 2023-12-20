@@ -1,11 +1,12 @@
-package pl.edu.agh.utp.dto.response;
+package pl.edu.agh.utp.records.dto;
 
 import java.util.List;
+import java.util.UUID;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
 
 public record TransactionDTO(
-    Long transactionId,
+    UUID transactionId,
     String description,
     String date,
     Category category,

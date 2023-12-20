@@ -1,3 +1,3 @@
-package pl.edu.agh.utp.dto.request;
+package pl.edu.agh.utp.records.request;
 
 public record LoginRequest(String email, String password) {}

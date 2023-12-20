@@ -1,6 +1,7 @@
 package pl.edu.agh.utp.model.nodes;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -12,7 +13,7 @@ import pl.edu.agh.utp.model.relationships.Payment;
 @Node
 @Data
 public class Transaction {
-  @Id @GeneratedValue private Long id;
+  @Id @GeneratedValue private UUID id;
   private final String description;
   private final String date;
 

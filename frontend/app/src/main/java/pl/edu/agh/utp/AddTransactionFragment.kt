@@ -22,23 +22,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.util.UUID
 
 
-class AddTransactionFragment(private val groupId: Long) : Fragment() {
+class AddTransactionFragment(private val groupId: UUID) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userManager = UserManager(requireContext())
     }
 
 
-    private var people: MutableMap<Long, PersonInfo> = mutableMapOf()
+    private var people: MutableMap<UUID, PersonInfo> = mutableMapOf()
 
     private var category: String = ""
     private var description: String = ""
     private var amount: Double = 0.0
     private lateinit var userManager: UserManager
     private var user: User? = null
-    private var debtsUserIds: List<Long> = listOf()
+    private var debtsUserIds: List<UUID> = listOf()
 
     private lateinit var descriptionEditText: EditText
     private lateinit var paymentEditText: EditText
@@ -96,12 +97,12 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
     fun validatePeople(): Boolean {
-        if (people.isEmpty() || !people.any { it.value.isSelected }) {
+        return if (people.isEmpty() || !people.any { it.value.isSelected }) {
             val errorMessage = "Select at least one person to your expense."
             displayErrorToast(errorMessage)
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
     fun validateAmount(): Boolean {
@@ -175,7 +176,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
         people.remove(user?.userId)
     }
 
-    private fun fetchGroupUsers(groupId: Long) {
+    private fun fetchGroupUsers(groupId: UUID) {
         Log.d("AddTransactionFragment","groupid: ${groupId.toString()}")
         ApiObject.instance.getUsersFromGroup(groupId).enqueue(object : Callback<List<User>> {
             override fun onResponse(
@@ -200,7 +201,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
         })
     }
 
-    private fun addTransaction(groupId: Long, transactionRequest: TransactionRequest, callback: (Boolean) -> Unit) {
+    private fun addTransaction(groupId: UUID, transactionRequest: TransactionRequest, callback: (Boolean) -> Unit) {
         ApiObject.instance.addTransaction(groupId, transactionRequest)
             .enqueue(object : Callback<Transaction> {
                 override fun onResponse(

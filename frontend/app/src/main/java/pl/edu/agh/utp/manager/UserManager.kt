@@ -3,6 +3,7 @@ package pl.edu.agh.utp.manager
 import android.content.Context
 import android.content.SharedPreferences
 import pl.edu.agh.utp.model.User
+import java.util.UUID
 
 class UserManager(context: Context) {
     private val prefs: SharedPreferences =
@@ -17,7 +18,7 @@ class UserManager(context: Context) {
 
     fun saveUser(user: User) {
         prefs.edit().apply {
-            putLong(KEY_ID, user.userId)
+            putString(KEY_ID, user.userId.toString())
             putString(KEY_USERNAME, user.name)
             putString(KEY_EMAIL, user.email)
             putBoolean(KEY_IS_LOGGED_IN, true)
@@ -28,12 +29,12 @@ class UserManager(context: Context) {
     fun getUser(): User? {
         if (!prefs.getBoolean(KEY_IS_LOGGED_IN, false)) return null
 
-        val id = prefs.getLong(KEY_ID, -1)
+        val id = prefs.getString(KEY_ID, null)
         val username = prefs.getString(KEY_USERNAME, null)
         val email = prefs.getString(KEY_EMAIL, null)
 
-        return if (id != -1L && username != null && email != null) User(
-            id,
+        return if (id != null && username != null && email != null) User(
+            UUID.fromString(id),
             username,
             email
         ) else null

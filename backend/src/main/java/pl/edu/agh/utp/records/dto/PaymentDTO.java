@@ -1,4 +1,4 @@
-package pl.edu.agh.utp.dto.response;
+package pl.edu.agh.utp.records.dto;
 
 import java.util.List;
 import pl.edu.agh.utp.model.relationships.Debt;

@@ -8,28 +8,19 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.UUID
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
-class TransactionsFragment( private val groupId:Long) : Fragment(),
+class TransactionsFragment( private val groupId: UUID) : Fragment(),
     TransactionsAdapter.TransactionClickListener {
 
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onTransactionClick(transactionId: Long) {
+    override fun onTransactionClick(transactionId: UUID) {
         navigateToTransactionDetailsFragment(transactionId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
     private lateinit var recyclerView: RecyclerView
     private lateinit var transactionsAdapter: TransactionsAdapter
@@ -51,7 +42,6 @@ class TransactionsFragment( private val groupId:Long) : Fragment(),
         recyclerView.adapter = transactionsAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-//        transactionsAdapter.fetchTransactions()
 
         return view
     }
@@ -68,7 +58,7 @@ class TransactionsFragment( private val groupId:Long) : Fragment(),
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    private fun navigateToTransactionDetailsFragment(transactionId: Long) {
+    private fun navigateToTransactionDetailsFragment(transactionId: UUID) {
         val fragment = TransactionDetailsFragment(transactionId)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)

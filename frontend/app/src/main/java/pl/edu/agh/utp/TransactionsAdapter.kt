@@ -5,39 +5,31 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsAnimation
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import pl.edu.agh.utp.api.ApiObject
-import pl.edu.agh.utp.api.ApiService
 import pl.edu.agh.utp.model.SimpleTransaction
-import pl.edu.agh.utp.model.Transaction
-import pl.edu.agh.utp.model.TransactionRequest
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
+import java.util.UUID
 
 
-class TransactionsAdapter(private val groupId: Long,private val clickListener: TransactionClickListener) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
+class TransactionsAdapter(private val groupId: UUID, private val clickListener: TransactionClickListener) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
 
 
     private var transactions: MutableList<SimpleTransaction> =  mutableListOf()
-//    @Inject
-//    lateinit var apiService: ApiService
+
     private val apiService = ApiObject.instance
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        // Tworzenie widoku dla pojedynczego elementu listy
-        // (np. za pomocą LayoutInflater.from(parent.context).inflate(...))
         return TransactionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_transaction, parent, false))
 
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        // Ustawianie danych dla poszczególnego elementu listy
         val transaction = transactions[position]
         holder.itemView.findViewById<TextView>(R.id.textViewDescription).text = transaction.description
         holder.itemView.findViewById<TextView>(R.id.textViewDate).text = transaction.date.toString()
@@ -53,7 +45,6 @@ class TransactionsAdapter(private val groupId: Long,private val clickListener: T
 
 
     fun fetchTransactions() {
-        // Pobieranie transakcji z API
         apiService.getTransactions(groupId).enqueue(object : Callback<List<SimpleTransaction>> {
             override fun onResponse(
                 call: Call<List<SimpleTransaction>>,
@@ -79,13 +70,10 @@ class TransactionsAdapter(private val groupId: Long,private val clickListener: T
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-//        val textViewDescription: TextView = itemView.findViewById(R.id.textViewDescription)
-//        val textViewDate: TextView = itemView.findViewById(R.id.textViewDate)
-
     }
 
     interface TransactionClickListener {
-        fun onTransactionClick(transactionId: Long)
+        fun onTransactionClick(transactionId: UUID)
     }
 }
 

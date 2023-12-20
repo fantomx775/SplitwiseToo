@@ -13,13 +13,9 @@ import pl.edu.agh.utp.model.Transaction
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-class TransactionDetailsFragment(private val transactionId: Long) : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
+class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
 
     private val apiService = ApiObject.instance
     private var transaction: Transaction? = null
@@ -34,10 +30,6 @@ class TransactionDetailsFragment(private val transactionId: Long) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(

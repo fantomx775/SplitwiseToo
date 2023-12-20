@@ -5,21 +5,22 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
-import lombok.Data;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.utp.dto.request.TransactionRequest;
-import pl.edu.agh.utp.dto.response.TransactionDTO;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.model.nodes.User;
 import pl.edu.agh.utp.model.relationships.Debt;
 import pl.edu.agh.utp.model.relationships.Payment;
+import pl.edu.agh.utp.records.request.TransactionRequest;
 import pl.edu.agh.utp.repository.CategoryRepository;
 import pl.edu.agh.utp.repository.TransactionRepository;
 import pl.edu.agh.utp.repository.UserRepository;
 
 @Service
-@Data
+@AllArgsConstructor
 public class TransactionService {
 
   private final TransactionRepository transactionRepository;
@@ -27,10 +28,11 @@ public class TransactionService {
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
 
-  public Optional<TransactionDTO> findTransactionById(Long id) {
-    return transactionRepository.findById(id).map(TransactionDTO::fromTransaction);
+  public Optional<Transaction> findTransactionById(UUID id) {
+    return transactionRepository.findById(id);
   }
 
+  @Transactional
   public Either<String, Transaction> createTransactionFromRequest(
       TransactionRequest transactionRequest) {
     Optional<Category> category = categoryRepository.findByName(transactionRequest.category());
