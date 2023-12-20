@@ -35,7 +35,7 @@ public class TransactionService {
       TransactionRequest transactionRequest) {
     Optional<Category> category = categoryRepository.findByName(transactionRequest.category());
     if (category.isEmpty()) {
-      return Either.left("Category not found");
+      categoryRepository.save(new Category(transactionRequest.category()));
     }
     Optional<User> paymentUser = userRepository.findById(transactionRequest.paymentUserId());
     if (paymentUser.isEmpty()) {
