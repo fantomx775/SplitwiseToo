@@ -53,10 +53,33 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
 
         user = userManager.getUser()
         fetchGroupUsers(groupId)
-        people.remove(user?.userId)
 
         val view = inflater.inflate(R.layout.fragment_add_transaction, container, false)
-        val peopleLinearLayout: ViewGroup = view.findViewById(R.id.linearLayoutPeople)
+//        val peopleLinearLayout: ViewGroup = view.findViewById(R.id.linearLayoutPeople)
+//
+//        for ((id, PersonData) in people) {
+//            val checkBox = CheckBox(requireContext())
+//            checkBox.text = PersonData.name
+//            checkBox.isChecked = PersonData.isSelected
+//            checkBox.setOnCheckedChangeListener { _, isChecked ->
+//                people[id]?.isSelected = isChecked
+//            }
+//            peopleLinearLayout.addView(checkBox)
+//        }
+
+        descriptionEditText = view.findViewById(R.id.editTextDescription)
+        paymentEditText = view.findViewById(R.id.editTextPayment)
+        categoryEditText = view.findViewById(R.id.editCategory)
+        addExpenseButton = view.findViewById(R.id.addExpenseButton)
+
+        addExpenseButton.setOnClickListener { addExpenseButtonClicked(it) }
+
+        return view
+    }
+
+    private fun updatePeopleLayout() {
+        val peopleLinearLayout: ViewGroup = requireView().findViewById(R.id.linearLayoutPeople)
+        peopleLinearLayout.removeAllViews()
 
         for ((id, PersonData) in people) {
             val checkBox = CheckBox(requireContext())
@@ -67,15 +90,6 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
             }
             peopleLinearLayout.addView(checkBox)
         }
-
-        descriptionEditText = view.findViewById(R.id.editTextDescription)
-        paymentEditText = view.findViewById(R.id.editTextPayment)
-        categoryEditText = view.findViewById(R.id.editCategory)
-        addExpenseButton = view.findViewById(R.id.addExpenseButton)
-
-        addExpenseButton.setOnClickListener { addExpenseButtonClicked(it) }
-
-        return view
     }
 
     fun displayErrorToast(errorMessage: String) {
@@ -156,7 +170,9 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
     private fun preparePeopleHashMap(users: List<User>) {
         for (user in users) {
             people[user.userId] = PersonInfo(user.name, false)
+            Log.i("AddTransactionFragment", "User: $user")
         }
+        people.remove(user?.userId)
     }
 
     private fun fetchGroupUsers(groupId: Long) {
@@ -172,6 +188,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
                     Log.d("AddTransactionFragment", "Users: $users")
 
                     preparePeopleHashMap(users)
+                    updatePeopleLayout()
                 } else {
                     Log.d("AddTransactionFragment", "Error: ${response.code()}")
                 }

@@ -24,8 +24,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Bulbulator..."
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="20dp"
             android:textSize="20sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="People's Emails:"
+            android:layout_marginBottom="20dp"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/emails_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="john@example.com, jane@example.com, ..."
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp"/>
+
+        <!-- RecyclerView for displaying added emails -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/emails_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:scrollbars="vertical"
+            android:layout_gravity="center"/>
+
 
         <Button
             android:id="@+id/add_group_button"
@@ -35,7 +60,5 @@
             android:textSize="20sp"/>
 
     </LinearLayout>
-
-
 
 </FrameLayout>

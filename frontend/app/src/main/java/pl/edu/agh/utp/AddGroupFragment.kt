@@ -1,12 +1,12 @@
 package pl.edu.agh.utp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.EditText
+import androidx.fragment.app.Fragment
 import pl.edu.agh.utp.manager.UserManager
 
 
@@ -28,7 +28,7 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
     }
 
     private fun createGroup() {
-        val groupName: String = view?.findViewById<View>(R.id.name_input).toString()
+        val groupName: String = (view?.findViewById<View>(R.id.name_input) as EditText).text.toString()
         val userId: Long = UserManager(requireContext()).getUser()?.userId!!
         groupAdapter.createGroup(groupName, userId)
     }
