@@ -4,6 +4,8 @@ import io.vavr.control.Either;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.utp.dto.request.GroupRequest;
@@ -19,47 +21,66 @@ import pl.edu.agh.utp.repository.UserRepository;
 @Service
 @Data
 public class GroupService {
-  private final GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  private final TransactionService transactionService;
+    private final TransactionService transactionService;
 
-  public Optional<GroupDTO> createGroup(GroupRequest request) {
-    return userRepository
-        .findById(request.userId())
-        .map(
-            user ->
-                new Group(request.name(), Collections.singletonList(user), Collections.emptyList()))
-        .map(groupRepository::save)
-        .map(GroupDTO::fromGroup);
-  }
+    public Optional<GroupDTO> createGroup(GroupRequest request) {
+        return userRepository
+                .findById(request.userId())
+                .map(
+                        user ->
+                                new Group(request.name(), Collections.singletonList(user), Collections.emptyList()))
+                .map(groupRepository::save)
+                .map(GroupDTO::fromGroup);
+    }
 
-  public List<SimpleTransactionDTO> getAllTransactionsByGroupId(Long groupId) {
-    return groupRepository.findAllTransactionsByGroupId(groupId);
-  }
+    public List<SimpleTransactionDTO> getAllTransactionsByGroupId(Long groupId) {
+        return groupRepository.findAllTransactionsByGroupId(groupId);
+    }
 
-  public List<UserDTO> getAllUsersByGroupId(Long groupId) {
-    return groupRepository.findAllUsersByGroupId(groupId);
-  }
+    public List<UserDTO> getAllUsersByGroupId(Long groupId) {
+        return groupRepository.findAllUsersByGroupId(groupId);
+    }
 
-  public Either<String, TransactionDTO> addTransactionToGroup(
-      Long groupId, TransactionRequest transactionRequest) {
-    return groupRepository
-        .findById(groupId)
-        .map(
-            group -> {
-              var transactionEither =
-                  transactionService.createTransactionFromRequest(transactionRequest);
-              return transactionEither
-                  .map(
-                      transaction -> {
-                        group.getTransactions().add(transaction);
-                        groupRepository.save(group);
-                        return TransactionDTO.fromTransaction(transaction);
-                      })
-                  .orElse(() -> Either.left(transactionEither.getLeft()));
-            })
-        .orElse(Either.left("Invalid group userId"));
-  }
+    public Either<String, TransactionDTO> addTransactionToGroup(
+            Long groupId, TransactionRequest transactionRequest) {
+        return groupRepository
+                .findById(groupId)
+                .map(
+                        group -> {
+                            var transactionEither =
+                                    transactionService.createTransactionFromRequest(transactionRequest);
+                            return transactionEither
+                                    .map(
+                                            transaction -> {
+                                                group.getTransactions().add(transaction);
+                                                groupRepository.save(group);
+                                                return TransactionDTO.fromTransaction(transaction);
+                                            })
+                                    .orElse(() -> Either.left(transactionEither.getLeft()));
+                        })
+                .orElse(Either.left("Invalid group userId"));
+    }
+
+    public Either<String, GroupDTO> addUsersToGroup(Long groupId, List<String> emails) {
+        return groupRepository
+                .findById(groupId)
+                .<Either<String, GroupDTO>>map(group -> {
+                    var users = emails.stream()
+                            .map(userRepository::findByEmail)
+                            .flatMap(Optional::stream)
+                            .toList();
+
+                    group.getUsers().addAll(users);
+                    groupRepository.save(group);
+
+                    GroupDTO groupDTO = GroupDTO.fromGroup(group);
+                    return Either.right(groupDTO);
+                })
+                .orElse(Either.left("Invalid group userId"));
+    }
+
 }

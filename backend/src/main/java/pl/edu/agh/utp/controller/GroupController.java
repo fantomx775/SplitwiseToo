@@ -35,6 +35,16 @@ public class GroupController {
     return ResponseEntity.ok(groupService.getAllUsersByGroupId(groupId));
   }
 
+  @PostMapping("/{id}/user")
+  public ResponseEntity<GroupDTO> addUserToGroup(@PathVariable("id") Long groupId, @RequestBody List<String> emails) {
+    return ResponseEntity.ok(
+        groupService
+            .addUsersToGroup(groupId, emails)
+            .getOrElseThrow(
+                (message) -> new ResponseStatusException(HttpStatus.NOT_FOUND, message))
+            );
+  }
+
   @GetMapping("/{id}/transactions")
   public ResponseEntity<List<SimpleTransactionDTO>> getAllTransactionsByGroupId(
       @PathVariable("id") Long groupId) {
