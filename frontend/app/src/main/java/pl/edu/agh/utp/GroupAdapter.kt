@@ -39,11 +39,6 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
 
     override fun getItemCount(): Int = groupList.size
 
-    fun setItems(newGroups: MutableList<Group>) {
-        groupList = newGroups
-        notifyDataSetChanged()
-    }
-
     class GroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val group_id: TextView = itemView.findViewById(R.id.group_id)
         val group_name: TextView = itemView.findViewById(R.id.group_name)
@@ -64,7 +59,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
                     val userGroups = response.body() ?: emptyList()
                     groupList.clear()
                     groupList.addAll(userGroups)
-                    notifyDataSetChanged()
+                    notifyItemRangeInserted(0, userGroups.size)
                 } else {
                     Log.e("FetchUserGroups", "Error: ${response.code()}")
                 }
@@ -80,8 +75,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         })
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    suspend fun createGroup(groupName: String, userId: Long, onGroupCreated: (Long) -> Unit) {
+    fun createGroup(groupName: String, userId: Long, onGroupCreated: (Long) -> Unit) {
         val groupRequest = GroupRequest(groupName, userId)
         try{
             val response = apiService.createGroup(groupRequest).execute()
@@ -91,7 +85,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
                 if (createdGroup != null) {
                     groupList.add(createdGroup)
                 }
-                notifyDataSetChanged()
+                notifyItemInserted(groupList.size - 1)
                 onGroupCreated(createdGroup!!.groupId)
             } else {
                 Log.e("CreateGroup", "Error: ${response.code()}")
@@ -101,7 +95,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         }
     }
 
-    suspend fun addUsersToGroup(groupId: Long ,emailList: MutableList<String>) {
+    fun addUsersToGroup(groupId: Long ,emailList: MutableList<String>) {
         apiService.addUsersToGroup(groupId, emailList).enqueue(object : Callback<Group> {
             override fun onResponse(
                 call: Call<Group>,
@@ -113,7 +107,6 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
                     if (createdGroup != null) {
                         groupList.add(createdGroup)
                     }
-                    notifyDataSetChanged()
                 } else {
                     Log.e("AddUsersToGroup", "Error: ${response.code()}")
                 }

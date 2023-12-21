@@ -38,7 +38,7 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
         addEmailButton.setOnClickListener {
             showEditDialog("email") { email ->
                 emailList.add(email)
-                emailListAdapter.notifyDataSetChanged()
+                emailListAdapter.notifyItemInserted(emailList.size - 1)
             }
         }
 
@@ -89,7 +89,7 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
                     navigateToGroupsFragment()
                 })
             }
-//            groupAdapter.addUsersToGroup(groupId, emailList)
+            groupAdapter.addUsersToGroup(groupId, emailList)
         }
     }
 
@@ -113,6 +113,12 @@ class EmailListAdapter(private val emailList: MutableList<String>) :
 
     override fun onBindViewHolder(holder: EmailViewHolder, position: Int) {
         val email = emailList[position]
+
+        holder.itemView.setOnClickListener {
+            emailList.remove(email)
+            notifyItemRemoved(position)
+        }
+
         holder.bind(email)
     }
 
