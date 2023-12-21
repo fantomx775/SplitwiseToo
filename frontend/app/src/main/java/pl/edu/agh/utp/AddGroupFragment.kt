@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pl.edu.agh.utp.manager.UserManager
 
 class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
@@ -81,10 +83,12 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
         var groupId: Long = 0
 
         lifecycleScope.launch {
-            groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
-                groupId = id
-                navigateToGroupsFragment()
-            })
+            withContext(Dispatchers.IO) {
+                groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
+                    groupId = id
+                    navigateToGroupsFragment()
+                })
+            }
 //            groupAdapter.addUsersToGroup(groupId, emailList)
         }
     }

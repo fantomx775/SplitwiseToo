@@ -97,7 +97,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
                 Log.e("CreateGroup", "Error: ${response.code()}")
             }
         }catch (e: Exception){
-            Log.e("CreateGroup", "Error: ${e.message}")
+            Log.e("CreateGroup", "Error: ${e.printStackTrace()}")
         }
     }
 

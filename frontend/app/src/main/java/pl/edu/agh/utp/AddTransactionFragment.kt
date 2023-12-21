@@ -218,7 +218,7 @@ class AddTransactionFragment(private val groupId: Long) : Fragment() {
                 }
 
                 override fun onFailure(call: Call<Transaction>, t: Throwable) {
-                    Log.d("AddTransactionFragment", "Error: ${t.message}")
+                    Log.d("AddTransactionFragment", "Error: ${t.printStackTrace()}")
                     callback(false)
                 }
             })
