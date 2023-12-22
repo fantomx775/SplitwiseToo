@@ -9,14 +9,14 @@ import pl.edu.agh.utp.ProfileFragment
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.SettingsFragment
 import pl.edu.agh.utp.databinding.ActivityMainBinding
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!UserManager(applicationContext).isLoggedIn()) {
+        if (!UserSession(applicationContext).isLoggedIn()) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }

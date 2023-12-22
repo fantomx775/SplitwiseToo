@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import pl.edu.agh.utp.model.User
 import java.util.UUID
 
-class UserManager(context: Context) {
+class UserSession(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("UserManager", Context.MODE_PRIVATE)
 

@@ -1,7 +1,6 @@
 package pl.edu.agh.utp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import java.util.UUID
 
 class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
@@ -33,6 +32,9 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
         groupAdapter = GroupAdapter(this)
         recyclerView.adapter = groupAdapter
+
+//        fetchUserGroups()
+
         return view
     }
 
@@ -41,15 +43,19 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
         fetchUserGroups()
     }
 
+//    private fun fetchUserGroups(userId: Long) {
+//        groupAdapter.setItems(mutableListOf(
+//            Group(15, "Nazwa"),
+//            Group(1, "To niezla nazwa"),
+//            Group(2, "To niezla rozbita swieczka")))
+//    }
+
     private fun fetchUserGroups() {
-        val userManager = UserManager(requireContext())
-        if (userManager.isLoggedIn()) {
-            userManager.getUser()?.userId?.let { userId ->
-                groupAdapter.fetchUserGroups(userId)
-            } ?: Log.e("FetchUserGroups", "User ID is null")
+        if (UserSession(requireContext()).isLoggedIn()) {
+            val userId: UUID = UserSession(requireContext()).getUser()?.userId!!
+            groupAdapter.fetchUserGroups(userId)
         }
     }
-
 
     private fun navigateToAddGroupFragment() {
         val addGroupFragment = AddGroupFragment(groupAdapter) // TODO: remove passing adapter once dependency injection works

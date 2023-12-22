@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.databinding.ActivityRegisterBinding
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import pl.edu.agh.utp.model.RegisterRequest
 import pl.edu.agh.utp.model.User
 
@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
                 val user = registerUser(RegisterRequest(username, email, password))
 
                 if (user != null) {
-                    UserManager(applicationContext).saveUser(user)
+                    UserSession(applicationContext).saveUser(user)
                     val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                     startActivity(intent)
                 } else {

@@ -41,6 +41,7 @@ public class UserController {
       return ResponseEntity.ok(
           userService
               .authenticateUser(loginRequest)
+              .map(UserDTO::fromUser)
               .orElseThrow(
                   () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
     } catch (InvalidPasswordException e) {
