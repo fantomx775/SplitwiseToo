@@ -15,4 +15,7 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
   @Query(
       "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE u.id = $userId RETURN g.id AS groupId, g.name AS name")
   List<SimpleGroup> findGroupsByUserId(@Param("userId") UUID userId);
+
+  @Query("MATCH (u:User) WHERE u.email IN $emails RETURN u")
+  List<User> findAllByEmail(@Param("emails") List<String> emails);
 }

@@ -76,8 +76,7 @@ public class GroupService {
   }
 
   private Group updateGroupWithUsers(Group group, List<String> emails) {
-    List<User> usersToAdd =
-        emails.stream().map(userRepository::findByEmail).flatMap(Optional::stream).toList();
+    List<User> usersToAdd = userRepository.findAllByEmail(emails);
     group.getUsers().addAll(usersToAdd);
     return groupRepository.save(group);
   }

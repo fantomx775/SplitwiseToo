@@ -15,6 +15,6 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
   List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
 
   @Query(
-      "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS userId, u.name  AS name, u.email AS email, u.password AS password")
+      "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS id, u.name  AS name, u.email AS email, u.password AS password")
   List<User> findAllUsersByGroupId(@Param("groupId") UUID groupId);
 }
