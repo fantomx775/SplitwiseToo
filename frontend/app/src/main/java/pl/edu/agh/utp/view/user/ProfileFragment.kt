@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.user
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -13,9 +13,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.activity.LoginActivity
 import pl.edu.agh.utp.manager.UserSession
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.user.User
 
 
 class ProfileFragment : Fragment() {

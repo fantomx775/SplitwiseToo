@@ -1,4 +1,4 @@
-package pl.edu.agh.utp.model
+package pl.edu.agh.utp.model.user
 
 import java.util.UUID
 

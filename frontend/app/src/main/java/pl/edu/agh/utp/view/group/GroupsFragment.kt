@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.group
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,10 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.manager.UserSession
+import pl.edu.agh.utp.view.transaction.TransactionsFragment
+import pl.edu.agh.utp.viewmodel.GroupAdapter
 import java.util.UUID
 
 class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {

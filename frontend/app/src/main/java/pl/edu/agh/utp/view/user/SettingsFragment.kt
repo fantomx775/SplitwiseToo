@@ -1,10 +1,11 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.user
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.R
 
 
 class SettingsFragment : Fragment() {

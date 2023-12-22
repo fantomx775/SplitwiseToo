@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.transaction
 
 import android.os.Bundle
 import android.util.Log
@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
-import pl.edu.agh.utp.model.Transaction
+import pl.edu.agh.utp.model.transaction.Transaction
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

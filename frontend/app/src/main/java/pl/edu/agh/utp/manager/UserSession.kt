@@ -2,7 +2,7 @@ package pl.edu.agh.utp.manager
 
 import android.content.Context
 import android.content.SharedPreferences
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.user.User
 import java.util.UUID
 
 class UserSession(context: Context) {

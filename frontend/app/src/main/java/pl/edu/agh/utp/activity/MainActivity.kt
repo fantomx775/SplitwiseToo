@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import pl.edu.agh.utp.GroupsFragment
-import pl.edu.agh.utp.ProfileFragment
+import pl.edu.agh.utp.view.group.GroupsFragment
+import pl.edu.agh.utp.view.user.ProfileFragment
 import pl.edu.agh.utp.R
-import pl.edu.agh.utp.SettingsFragment
+import pl.edu.agh.utp.view.user.SettingsFragment
 import pl.edu.agh.utp.databinding.ActivityMainBinding
 import pl.edu.agh.utp.manager.UserSession
 

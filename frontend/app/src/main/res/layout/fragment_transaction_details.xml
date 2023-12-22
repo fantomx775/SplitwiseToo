@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransactionDetailsFragment">
+    tools:context=".view.transaction.TransactionDetailsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".TransactionDetailsFragment">
+        tools:context=".view.transaction.TransactionDetailsFragment">
 
 
         <TextView

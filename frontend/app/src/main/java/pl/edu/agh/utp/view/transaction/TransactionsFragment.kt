@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.transaction
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,10 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import pl.edu.agh.utp.R
+import pl.edu.agh.utp.view.transaction.AddTransactionFragment
+import pl.edu.agh.utp.view.transaction.TransactionDetailsFragment
+import pl.edu.agh.utp.viewmodel.TransactionsAdapter
 import java.util.UUID
 
 

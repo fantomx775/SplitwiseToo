@@ -1,13 +1,13 @@
 package pl.edu.agh.utp.api
 
-import pl.edu.agh.utp.model.Group
-import pl.edu.agh.utp.model.GroupRequest
-import pl.edu.agh.utp.model.LoginRequest
-import pl.edu.agh.utp.model.RegisterRequest
-import pl.edu.agh.utp.model.SimpleTransaction
-import pl.edu.agh.utp.model.Transaction
-import pl.edu.agh.utp.model.TransactionRequest
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.group.Group
+import pl.edu.agh.utp.model.group.GroupRequest
+import pl.edu.agh.utp.model.user.LoginRequest
+import pl.edu.agh.utp.model.user.RegisterRequest
+import pl.edu.agh.utp.model.transaction.SimpleTransaction
+import pl.edu.agh.utp.model.transaction.Transaction
+import pl.edu.agh.utp.model.transaction.TransactionRequest
+import pl.edu.agh.utp.model.user.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

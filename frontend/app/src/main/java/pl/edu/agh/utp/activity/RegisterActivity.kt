@@ -11,8 +11,8 @@ import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.databinding.ActivityRegisterBinding
 import pl.edu.agh.utp.manager.UserSession
-import pl.edu.agh.utp.model.RegisterRequest
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.user.RegisterRequest
+import pl.edu.agh.utp.model.user.User
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding

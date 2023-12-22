@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.viewmodel
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
-import pl.edu.agh.utp.model.Group
-import pl.edu.agh.utp.model.GroupRequest
+import pl.edu.agh.utp.model.group.Group
+import pl.edu.agh.utp.model.group.GroupRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

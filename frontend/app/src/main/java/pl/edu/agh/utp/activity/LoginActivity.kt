@@ -11,8 +11,8 @@ import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.databinding.ActivityLoginBinding
 import pl.edu.agh.utp.manager.UserSession
-import pl.edu.agh.utp.model.LoginRequest
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.user.LoginRequest
+import pl.edu.agh.utp.model.user.User
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding

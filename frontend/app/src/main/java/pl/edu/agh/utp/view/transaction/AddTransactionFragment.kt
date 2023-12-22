@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.transaction
 
 import android.os.Build
 import android.os.Bundle
@@ -12,12 +12,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.manager.UserSession
-import pl.edu.agh.utp.model.PersonInfo
-import pl.edu.agh.utp.model.Transaction
-import pl.edu.agh.utp.model.TransactionRequest
-import pl.edu.agh.utp.model.User
+import pl.edu.agh.utp.model.user.PersonInfo
+import pl.edu.agh.utp.model.transaction.Transaction
+import pl.edu.agh.utp.model.transaction.TransactionRequest
+import pl.edu.agh.utp.model.user.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package pl.edu.agh.utp
+package pl.edu.agh.utp.view.group
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.edu.agh.utp.R
 import pl.edu.agh.utp.manager.UserSession
+import pl.edu.agh.utp.viewmodel.EmailListAdapter
+import pl.edu.agh.utp.viewmodel.GroupAdapter
 import java.util.UUID
 
 class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
@@ -100,37 +102,5 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
         transaction.replace(R.id.frameLayout, groupsFragment)
         transaction.addToBackStack(null)
         transaction.commit()
-    }
-}
-
-class EmailListAdapter(private val emailList: MutableList<String>) :
-    RecyclerView.Adapter<EmailListAdapter.EmailViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmailViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
-        return EmailViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: EmailViewHolder, position: Int) {
-        val email = emailList[position]
-
-        holder.itemView.setOnClickListener {
-            emailList.remove(email)
-            notifyItemRemoved(position)
-        }
-
-        holder.bind(email)
-    }
-
-    override fun getItemCount(): Int {
-        return emailList.size
-    }
-
-    class EmailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(email: String) {
-            val textView: TextView = itemView.findViewById(android.R.id.text1)
-            textView.text = email
-        }
     }
 }
