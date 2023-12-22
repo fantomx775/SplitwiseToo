@@ -14,7 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import pl.edu.agh.utp.activity.LoginActivity
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import pl.edu.agh.utp.model.User
 
 
@@ -22,12 +22,12 @@ class ProfileFragment : Fragment() {
     private var name: String = "TestName"
     private var email: String = "test@mail.com"
     private var password: String?= "TestPassword"
-    private lateinit var userManager: UserManager
+    private lateinit var userSession: UserSession
     private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userManager = UserManager(requireContext())
+        userSession = UserSession(requireContext())
     }
 
     override fun onCreateView(
@@ -40,8 +40,8 @@ class ProfileFragment : Fragment() {
         view.findViewById<TextView>(R.id.textViewEmail)?.text = email
         view.findViewById<TextView>(R.id.textViewPassword)?.text = password
         view.findViewById<Button>(R.id.logoutButton)?.setOnClickListener {
-            userManager.logOut()
-            user = userManager.getUser()
+            userSession.logOut()
+            user = userSession.getUser()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }

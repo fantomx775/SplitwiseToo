@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import java.util.UUID
 
 class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
@@ -79,24 +79,20 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
 
 
     private fun createGroup(emailList: MutableList<String>) {
-        val groupName: String = view?.findViewById<EditText>(R.id.name_input)?.text.toString()
-        val userManager = UserManager(requireContext())
+        val groupName: String = (view?.findViewById<EditText>(R.id.name_input)?.text.toString() ?: "")
+        val userId: UUID = UserSession(requireContext()).getUser()?.userId!!
+        var groupId: UUID = UUID.randomUUID()
 
-        userManager.getUser()?.userId?.let { userId ->
-            var groupId: UUID = UUID.randomUUID()
-
-            lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
-                        groupId = id
-                        navigateToGroupsFragment()
-                    })
-                }
-                groupAdapter.addUsersToGroup(groupId, emailList)
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
+                    groupId = id
+                    navigateToGroupsFragment()
+                })
             }
-        } ?: throw IllegalStateException("User ID is null")
+            groupAdapter.addUsersToGroup(groupId, emailList)
+        }
     }
-
 
     private fun navigateToGroupsFragment() {
         val groupsFragment = GroupsFragment()

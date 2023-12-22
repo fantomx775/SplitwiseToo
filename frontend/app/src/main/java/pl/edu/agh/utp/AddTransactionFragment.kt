@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import pl.edu.agh.utp.api.ApiObject
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import pl.edu.agh.utp.model.PersonInfo
 import pl.edu.agh.utp.model.Transaction
 import pl.edu.agh.utp.model.TransactionRequest
@@ -28,7 +28,7 @@ import java.util.UUID
 class AddTransactionFragment(private val groupId: UUID) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userManager = UserManager(requireContext())
+        userSession = UserSession(requireContext())
     }
 
 
@@ -37,7 +37,7 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
     private var category: String = ""
     private var description: String = ""
     private var amount: Double = 0.0
-    private lateinit var userManager: UserManager
+    private lateinit var userSession: UserSession
     private var user: User? = null
     private var debtsUserIds: List<UUID> = listOf()
 
@@ -52,7 +52,7 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        user = userManager.getUser()
+        user = userSession.getUser()
         fetchGroupUsers(groupId)
 
         val view = inflater.inflate(R.layout.fragment_add_transaction, container, false)

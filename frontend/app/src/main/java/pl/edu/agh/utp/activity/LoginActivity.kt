@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.api.ApiObject
 import pl.edu.agh.utp.databinding.ActivityLoginBinding
-import pl.edu.agh.utp.manager.UserManager
+import pl.edu.agh.utp.manager.UserSession
 import pl.edu.agh.utp.model.LoginRequest
 import pl.edu.agh.utp.model.User
 
@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
                 val user = loginUser(LoginRequest(email, password))
 
                 if (user != null) {
-                    UserManager(applicationContext).saveUser(user)
+                    UserSession(applicationContext).saveUser(user)
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
                 } else {
