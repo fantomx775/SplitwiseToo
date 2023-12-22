@@ -62,7 +62,7 @@ public class TransactionService {
             category.get(),
             payment,
             debts);
-    return Either.right(transactionRepository.save(transaction));
+    return Either.right(transaction);
   }
 
   private double getAmountToPay(TransactionRequest transactionRequest) {

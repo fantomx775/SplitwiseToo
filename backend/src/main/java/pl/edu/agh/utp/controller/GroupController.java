@@ -33,8 +33,8 @@ public class GroupController {
     return groupService.getAllUsersByGroupId(groupId).stream().map(UserDTO::fromUser).toList();
   }
 
-  @PostMapping("/{id}/user")
-  public SimpleGroup addUserToGroup(
+  @PostMapping("/{id}/users")
+  public SimpleGroup addUsersToGroup(
       @PathVariable("id") UUID groupId, @RequestBody List<String> emails) {
     return groupService
         .addUsersToGroup(groupId, emails)

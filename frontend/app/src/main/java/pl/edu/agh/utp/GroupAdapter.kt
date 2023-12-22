@@ -34,14 +34,12 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
             clickListener.onGroupClick(group.groupId)
         }
 
-        holder.group_id.text = group.groupId.toString()
         holder.group_name.text = group.name
     }
 
     override fun getItemCount(): Int = groupList.size
 
     class GroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val group_id: TextView = itemView.findViewById(R.id.group_id)
         val group_name: TextView = itemView.findViewById(R.id.group_name)
     }
 

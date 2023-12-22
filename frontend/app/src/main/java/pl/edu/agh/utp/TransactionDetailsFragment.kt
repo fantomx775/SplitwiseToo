@@ -20,8 +20,7 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
     private val apiService = ApiObject.instance
     private var transaction: Transaction? = null
 
-    // Views
-    private lateinit var textViewTransactionId: TextView
+
     private lateinit var textViewDescription: TextView
     private lateinit var textViewDate: TextView
     private lateinit var textViewCategory: TextView
@@ -42,8 +41,7 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize views
-        textViewTransactionId = view.findViewById(R.id.textViewTransactionId)
+
         textViewDescription = view.findViewById(R.id.textViewDescription)
         textViewDate = view.findViewById(R.id.textViewDate)
         textViewCategory = view.findViewById(R.id.textViewCategory)
@@ -77,19 +75,18 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
 
     private fun updateTransactionDetails(transaction: Transaction?) {
         transaction?.let {
-            textViewTransactionId.text = "Transaction ID: ${it.transactionId}"
             textViewDescription.text = "Description: ${it.description}"
             textViewDate.text = "Date: ${it.date}"
             textViewCategory.text = "Category: ${it.category.name}"
 
-            it.payment?.let { payment ->
+            it.payment.let { payment ->
                 val user = payment.user
                 textViewUsers.text = "User: ${user.name} - Amount: ${payment.amount}"
             } ?: run {
                 textViewUsers.text = "Users: No payment information"
             }
 
-            it.debts?.let { debts ->
+            it.debts.let { debts ->
                 val debtsText = debts.joinToString("\n") { debt ->
                     "User: ${debt.user.name} - Amount: ${debt.amount}"
                 }

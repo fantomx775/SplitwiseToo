@@ -2,6 +2,7 @@ package pl.edu.agh.utp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,7 @@ class RegisterActivity : AppCompatActivity() {
             try {
                 val response = ApiObject.instance.registerUser(registerRequest).execute()
                 if (response.isSuccessful) response.body() else null
+
             } catch (e: Exception) {
                 null
             }

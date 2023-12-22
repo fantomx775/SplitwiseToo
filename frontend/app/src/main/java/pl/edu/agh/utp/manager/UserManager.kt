@@ -10,7 +10,7 @@ class UserManager(context: Context) {
         context.getSharedPreferences("UserManager", Context.MODE_PRIVATE)
 
     companion object {
-        private const val KEY_ID = "id"
+        private const val KEY_ID = "user_id"
         private const val KEY_USERNAME = "username"
         private const val KEY_EMAIL = "email"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"

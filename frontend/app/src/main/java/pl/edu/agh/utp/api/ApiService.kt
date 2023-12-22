@@ -17,33 +17,33 @@ import java.util.UUID
 
 interface ApiService {
 
-    @POST("group/{id}/user")
+    @POST("groups/{id}/users")
     fun addUsersToGroup(@Path("id") groupId: UUID, @Body userIds: List<String>): Call<Group>
 
-    @GET("group/{id}/users")
+    @GET("groups/{id}/users")
     fun getUsersFromGroup(@Path("id") groupId: UUID): Call<List<User>>
 
-    @POST("group/create")
+    @POST("groups")
     fun createGroup(@Body groupCreationRequest: GroupRequest): Call<Group>
 
-    @GET("user/{id}/groups")
+    @GET("users/{id}/groups")
     fun getUserGroups(@Path("id") userId: UUID): Call<List<Group>>
 
-    @GET("group/{id}/transactions")
+    @GET("groups/{id}/transactions")
     fun getTransactions(@Path("id") groupId: UUID): Call<List<SimpleTransaction>>
 
-    @GET("transaction/{id}")
+    @GET("transactions/{id}")
     fun getTransaction(@Path("id") transactionId:UUID): Call<Transaction>
 
-    @POST("group/{id}/transactions")
+    @POST("groups/{id}/transactions")
     fun addTransaction(
             @Path("id") groupId: UUID,
             @Body transaction: TransactionRequest
     ): Call<Transaction>
 
-    @POST("/user/login")
+    @POST("/users/login")
     fun loginUser(@Body loginRequest: LoginRequest): Call<User>
 
-    @POST("/user/create")
+    @POST("/users")
     fun registerUser(@Body registerRequest: RegisterRequest): Call<User>
 }
