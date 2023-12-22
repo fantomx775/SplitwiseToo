@@ -13,30 +13,31 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.util.UUID
 
 interface ApiService {
 
     @POST("group/{id}/user")
-    fun addUsersToGroup(@Path("id") groupId: Long, @Body userIds: List<String>): Call<Group>
+    fun addUsersToGroup(@Path("id") groupId: UUID, @Body userIds: List<String>): Call<Group>
 
     @GET("group/{id}/users")
-    fun getUsersFromGroup(@Path("id") groupId: Long): Call<List<User>>
+    fun getUsersFromGroup(@Path("id") groupId: UUID): Call<List<User>>
 
     @POST("group/create")
     fun createGroup(@Body groupCreationRequest: GroupRequest): Call<Group>
 
     @GET("user/{id}/groups")
-    fun getUserGroups(@Path("id") userId: Long): Call<List<Group>>
+    fun getUserGroups(@Path("id") userId: UUID): Call<List<Group>>
 
     @GET("group/{id}/transactions")
-    fun getTransactions(@Path("id") groupId: Long): Call<List<SimpleTransaction>>
+    fun getTransactions(@Path("id") groupId: UUID): Call<List<SimpleTransaction>>
 
     @GET("transaction/{id}")
-    fun getTransaction(@Path("id") transactionId: Long): Call<Transaction>
+    fun getTransaction(@Path("id") transactionId:UUID): Call<Transaction>
 
     @POST("group/{id}/transactions")
     fun addTransaction(
-            @Path("id") groupId: Long,
+            @Path("id") groupId: UUID,
             @Body transaction: TransactionRequest
     ): Call<Transaction>
 

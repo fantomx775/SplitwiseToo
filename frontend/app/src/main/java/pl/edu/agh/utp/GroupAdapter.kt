@@ -13,6 +13,7 @@ import pl.edu.agh.utp.model.GroupRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
 
@@ -45,10 +46,10 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
     }
 
     interface OnGroupClickListener {
-        fun onGroupClick(groupId: Long)
+        fun onGroupClick(groupId: UUID)
     }
 
-    fun fetchUserGroups(userId: Long) {
+    fun fetchUserGroups(userId: UUID) {
         apiService.getUserGroups(userId).enqueue(object : Callback<List<Group>> {
             override fun onResponse(
                 call: Call<List<Group>>,
@@ -75,7 +76,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         })
     }
 
-    fun createGroup(groupName: String, userId: Long, onGroupCreated: (Long) -> Unit) {
+    fun createGroup(groupName: String, userId: UUID, onGroupCreated: (UUID) -> Unit) {
         val groupRequest = GroupRequest(groupName, userId)
         try{
             val response = apiService.createGroup(groupRequest).execute()
@@ -95,7 +96,7 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
         }
     }
 
-    fun addUsersToGroup(groupId: Long ,emailList: MutableList<String>) {
+    fun addUsersToGroup(groupId: UUID ,emailList: MutableList<String>) {
         apiService.addUsersToGroup(groupId, emailList).enqueue(object : Callback<Group> {
             override fun onResponse(
                 call: Call<Group>,

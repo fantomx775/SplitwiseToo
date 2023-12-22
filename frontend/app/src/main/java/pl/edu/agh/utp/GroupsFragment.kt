@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.agh.utp.manager.UserManager
+import java.util.UUID
 
 class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
 
@@ -51,7 +52,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
 
     private fun fetchUserGroups() {
         if (UserManager(requireContext()).isLoggedIn()) {
-            val userId: Long = UserManager(requireContext()).getUser()?.userId!!
+            val userId: UUID = UserManager(requireContext()).getUser()?.userId!!
             groupAdapter.fetchUserGroups(userId)
         }
     }
@@ -64,7 +65,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
         transaction.commit()
     }
 
-    private fun navigateToTransactionsFragment(groupId: Long) {
+    private fun navigateToTransactionsFragment(groupId: UUID) {
         val transactionFragment = TransactionsFragment(groupId)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, transactionFragment)
@@ -72,7 +73,7 @@ class GroupsFragment : Fragment(), GroupAdapter.OnGroupClickListener {
         transaction.commit()
     }
 
-    override fun onGroupClick(groupId: Long) {
+    override fun onGroupClick(groupId: UUID) {
         navigateToTransactionsFragment(groupId)
     }
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.agh.utp.manager.UserManager
+import java.util.UUID
 
 class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
 
@@ -79,8 +80,8 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
 
     private fun createGroup(emailList: MutableList<String>) {
         val groupName: String = (view?.findViewById<EditText>(R.id.name_input)?.text.toString() ?: "")
-        val userId: Long = UserManager(requireContext()).getUser()?.userId!!
-        var groupId: Long = 0
+        val userId: UUID = UserManager(requireContext()).getUser()?.userId!!
+        var groupId: UUID = UUID.randomUUID()
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
