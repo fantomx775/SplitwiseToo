@@ -9,5 +9,4 @@ data class TransactionRequest(
     val amount: Double,
     val paymentUserId: UUID,
     val debtsUserIds: List<UUID>
-) {
-}
+)

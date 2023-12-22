@@ -9,5 +9,4 @@ data class Transaction(
     val category: Category,
     val payment: Payment,
     val debts: List<Debt>
-) {
-}
+)

@@ -1,6 +1,5 @@
 package pl.edu.agh.utp
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,13 +33,13 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
             clickListener.onGroupClick(group.groupId)
         }
 
-        holder.group_name.text = group.name
+        holder.groupName.text = group.name
     }
 
     override fun getItemCount(): Int = groupList.size
 
     class GroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val group_name: TextView = itemView.findViewById(R.id.group_name)
+        val groupName: TextView = itemView.findViewById(R.id.group_name)
     }
 
     interface OnGroupClickListener {
@@ -76,23 +75,24 @@ class GroupAdapter(private val clickListener: OnGroupClickListener) : RecyclerVi
 
     fun createGroup(groupName: String, userId: UUID, onGroupCreated: (UUID) -> Unit) {
         val groupRequest = GroupRequest(groupName, userId)
-        try{
+        try {
             val response = apiService.createGroup(groupRequest).execute()
             if (response.isSuccessful) {
                 Log.i("CreateGroup", "Success: ${response.body()}")
                 val createdGroup = response.body()
-                if (createdGroup != null) {
-                    groupList.add(createdGroup)
-                }
-                notifyItemInserted(groupList.size - 1)
-                onGroupCreated(createdGroup!!.groupId)
+                createdGroup?.let {
+                    groupList.add(it)
+                    notifyItemInserted(groupList.size - 1)
+                    onGroupCreated(it.groupId)
+                } ?: Log.w("CreateGroup", "Received null group in response")
             } else {
-                Log.e("CreateGroup", "Error: ${response.code()}")
+                Log.e("CreateGroup", "Error: ${response.code()} - ${response.message()}")
             }
-        }catch (e: Exception){
-            Log.e("CreateGroup", "Error: ${e.printStackTrace()}")
+        } catch (e: Exception) {
+            Log.e("CreateGroup", "Error: ${e.message}", e)
         }
     }
+
 
     fun addUsersToGroup(groupId: UUID ,emailList: MutableList<String>) {
         apiService.addUsersToGroup(groupId, emailList).enqueue(object : Callback<Group> {

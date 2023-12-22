@@ -79,20 +79,24 @@ class AddGroupFragment(private val groupAdapter: GroupAdapter) : Fragment() {
 
 
     private fun createGroup(emailList: MutableList<String>) {
-        val groupName: String = (view?.findViewById<EditText>(R.id.name_input)?.text.toString() ?: "")
-        val userId: UUID = UserManager(requireContext()).getUser()?.userId!!
-        var groupId: UUID = UUID.randomUUID()
+        val groupName: String = view?.findViewById<EditText>(R.id.name_input)?.text.toString()
+        val userManager = UserManager(requireContext())
 
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
-                    groupId = id
-                    navigateToGroupsFragment()
-                })
+        userManager.getUser()?.userId?.let { userId ->
+            var groupId: UUID = UUID.randomUUID()
+
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    groupAdapter.createGroup(groupName, userId, onGroupCreated = { id ->
+                        groupId = id
+                        navigateToGroupsFragment()
+                    })
+                }
+                groupAdapter.addUsersToGroup(groupId, emailList)
             }
-            groupAdapter.addUsersToGroup(groupId, emailList)
-        }
+        } ?: throw IllegalStateException("User ID is null")
     }
+
 
     private fun navigateToGroupsFragment() {
         val groupsFragment = GroupsFragment()

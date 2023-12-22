@@ -1,6 +1,5 @@
 package pl.edu.agh.utp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,10 +25,6 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
     private lateinit var textViewCategory: TextView
     private lateinit var textViewUsers: TextView
     private lateinit var textViewDebts: TextView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,8 +77,6 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
             it.payment.let { payment ->
                 val user = payment.user
                 textViewUsers.text = "User: ${user.name} - Amount: ${payment.amount}"
-            } ?: run {
-                textViewUsers.text = "Users: No payment information"
             }
 
             it.debts.let { debts ->
@@ -91,8 +84,6 @@ class TransactionDetailsFragment(private val transactionId: UUID) : Fragment() {
                     "User: ${debt.user.name} - Amount: ${debt.amount}"
                 }
                 textViewDebts.text = "Debts:\n$debtsText"
-            } ?: run {
-                textViewDebts.text = "Debts: No debts information"
             }
         }
     }

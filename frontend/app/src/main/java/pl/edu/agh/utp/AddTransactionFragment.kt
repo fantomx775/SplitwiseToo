@@ -56,24 +56,13 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
         fetchGroupUsers(groupId)
 
         val view = inflater.inflate(R.layout.fragment_add_transaction, container, false)
-//        val peopleLinearLayout: ViewGroup = view.findViewById(R.id.linearLayoutPeople)
-//
-//        for ((id, PersonData) in people) {
-//            val checkBox = CheckBox(requireContext())
-//            checkBox.text = PersonData.name
-//            checkBox.isChecked = PersonData.isSelected
-//            checkBox.setOnCheckedChangeListener { _, isChecked ->
-//                people[id]?.isSelected = isChecked
-//            }
-//            peopleLinearLayout.addView(checkBox)
-//        }
 
         descriptionEditText = view.findViewById(R.id.editTextDescription)
         paymentEditText = view.findViewById(R.id.editTextPayment)
         categoryEditText = view.findViewById(R.id.editCategory)
         addExpenseButton = view.findViewById(R.id.addExpenseButton)
 
-        addExpenseButton.setOnClickListener { addExpenseButtonClicked(it) }
+        addExpenseButton.setOnClickListener { addExpenseButtonClicked() }
 
         return view
     }
@@ -82,10 +71,10 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
         val peopleLinearLayout: ViewGroup = requireView().findViewById(R.id.linearLayoutPeople)
         peopleLinearLayout.removeAllViews()
 
-        for ((id, PersonData) in people) {
+        for ((id, personData) in people) {
             val checkBox = CheckBox(requireContext())
-            checkBox.text = PersonData.name
-            checkBox.isChecked = PersonData.isSelected
+            checkBox.text = personData.name
+            checkBox.isChecked = personData.isSelected
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 people[id]?.isSelected = isChecked
             }
@@ -93,10 +82,10 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
         }
     }
 
-    fun displayErrorToast(errorMessage: String) {
+    private fun displayErrorToast(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
-    fun validatePeople(): Boolean {
+    private fun validatePeople(): Boolean {
         return if (people.isEmpty() || !people.any { it.value.isSelected }) {
             val errorMessage = "Select at least one person to your expense."
             displayErrorToast(errorMessage)
@@ -105,28 +94,28 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
             true
         }
     }
-    fun validateAmount(): Boolean {
+    private fun validateAmount(): Boolean {
         if (amount <= 0.0) {
             displayErrorToast("Amount cannot be empty.")
             return false
         }
         return true
     }
-    fun validateDescription(): Boolean {
-        if (description.isNullOrBlank()) {
+    private fun validateDescription(): Boolean {
+        if (description.isBlank()) {
             displayErrorToast("Description cannot be empty.")
             return false
         }
         return true
     }
-    fun validateCategory(): Boolean {
-        if (category.isNullOrBlank()) {
+    private fun validateCategory(): Boolean {
+        if (category.isBlank()) {
             displayErrorToast("Category cannot be empty.")
             return false
         }
         return true
     }
-    fun validate(): Boolean {
+    private fun validate(): Boolean {
         description = descriptionEditText.text.toString()
         amount = paymentEditText.text.toString().toDoubleOrNull() ?: 0.0
         category = categoryEditText.text.toString()
@@ -140,33 +129,37 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addExpenseButtonClicked(view: View) {
-        if(!validate()){
+    fun addExpenseButtonClicked() {
+        if (!validate()) {
             return
         }
 
         val todaysDate: LocalDate = LocalDate.now()
         debtsUserIds = people.filter { it.value.isSelected }.map { it.key }
 
-        val TransactionRequest = TransactionRequest(
-            description,
-            todaysDate.toString(),
-            category,
-            amount,
-            user?.userId!!,
-            debtsUserIds
-        )
+        user?.userId?.let { userId ->
+            val transactionRequest = TransactionRequest(
+                description,
+                todaysDate.toString(),
+                category,
+                amount,
+                userId,
+                debtsUserIds
+            )
 
-        addTransaction(groupId, TransactionRequest) { isSuccess ->
-            if (isSuccess) {
-                Toast.makeText(requireContext(), "Expense added successfully", Toast.LENGTH_SHORT).show()
-                navigateToTransactionsFragment()
-            } else {
-                Toast.makeText(requireContext(), "Something went worng. Expense not added", Toast.LENGTH_SHORT).show()
+            addTransaction(groupId, transactionRequest) { isSuccess ->
+                if (isSuccess) {
+                    Toast.makeText(requireContext(), "Expense added successfully", Toast.LENGTH_SHORT).show()
+                    navigateToTransactionsFragment()
+                } else {
+                    Toast.makeText(requireContext(), "Something went wrong. Expense not added", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+        } ?: Toast.makeText(requireContext(), "User ID is null", Toast.LENGTH_SHORT).show()
     }
+
 
     private fun preparePeopleHashMap(users: List<User>) {
         for (user in users) {
@@ -177,19 +170,18 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
     }
 
     private fun fetchGroupUsers(groupId: UUID) {
-        Log.d("AddTransactionFragment","groupid: ${groupId.toString()}")
+        Log.d("AddTransactionFragment","groupid: $groupId")
         ApiObject.instance.getUsersFromGroup(groupId).enqueue(object : Callback<List<User>> {
             override fun onResponse(
                 call: Call<List<User>>,
                 response: Response<List<User>>
             ) {
                 if (response.isSuccessful) {
-
-                    var users = response.body()!!
-                    Log.d("AddTransactionFragment", "Users: $users")
-
-                    preparePeopleHashMap(users)
-                    updatePeopleLayout()
+                    response.body()?.let { users ->
+                        Log.d("AddTransactionFragment", "Users: $users")
+                        preparePeopleHashMap(users)
+                        updatePeopleLayout()
+                    } ?: Log.d("AddTransactionFragment", "Response body is null")
                 } else {
                     Log.d("AddTransactionFragment", "Error: ${response.code()}")
                 }
@@ -200,6 +192,7 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
             }
         })
     }
+
 
     private fun addTransaction(groupId: UUID, transactionRequest: TransactionRequest, callback: (Boolean) -> Unit) {
         ApiObject.instance.addTransaction(groupId, transactionRequest)

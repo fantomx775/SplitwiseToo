@@ -32,7 +32,7 @@ class TransactionsAdapter(private val groupId: UUID, private val clickListener: 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
         holder.itemView.findViewById<TextView>(R.id.textViewDescription).text = transaction.description
-        holder.itemView.findViewById<TextView>(R.id.textViewDate).text = transaction.date.toString()
+        holder.itemView.findViewById<TextView>(R.id.textViewDate).text = transaction.date
 
         holder.itemView.setOnClickListener {
             clickListener.onTransactionClick(transaction.transactionId)
@@ -68,9 +68,7 @@ class TransactionsAdapter(private val groupId: UUID, private val clickListener: 
         })
     }
 
-    class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface TransactionClickListener {
         fun onTransactionClick(transactionId: UUID)

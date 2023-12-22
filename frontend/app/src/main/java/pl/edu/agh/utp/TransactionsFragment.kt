@@ -19,9 +19,6 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
         navigateToTransactionDetailsFragment(transactionId)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     private lateinit var recyclerView: RecyclerView
     private lateinit var transactionsAdapter: TransactionsAdapter
 
