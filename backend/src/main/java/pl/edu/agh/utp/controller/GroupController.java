@@ -2,10 +2,15 @@ package pl.edu.agh.utp.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.edu.agh.utp.model.nodes.Category;
+import pl.edu.agh.utp.records.Reimbursment;
+import pl.edu.agh.utp.records.dto.ReimbursmentDTO;
 import pl.edu.agh.utp.records.dto.TransactionDTO;
 import pl.edu.agh.utp.records.dto.UserDTO;
 import pl.edu.agh.utp.records.request.GroupRequest;
@@ -55,4 +60,9 @@ public class GroupController {
         .map(TransactionDTO::fromTransaction)
         .getOrElseThrow((message) -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
   }
+
+    @GetMapping("/{id}/reimbursments")
+    public List<ReimbursmentDTO> getReimbursmentsByGroupId(@PathVariable("id") UUID groupId) {
+       return groupService.getReimbursmentsByGroupId(groupId).stream().map(ReimbursmentDTO::fromReimbursment).toList();
+    }
 }
