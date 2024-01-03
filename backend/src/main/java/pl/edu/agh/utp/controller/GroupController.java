@@ -85,4 +85,12 @@ public class GroupController {
         .map(ReimbursmentDTO::fromReimbursment)
         .toList();
   }
+
+  @PostMapping("/{id}/reimbursements/categories")
+  public List<ReimbursmentDTO> getReimbursementsByGroupIdAndCategories(
+      @PathVariable("id") UUID groupId, @RequestBody List<Category> categories) {
+    return groupService.getReimbursementsByGroupIdAndCategory(groupId,categories).stream()
+            .map(ReimbursmentDTO::fromReimbursment)
+            .toList();
+  }
 }

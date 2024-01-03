@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.model.nodes.User;
@@ -89,6 +90,17 @@ public class GroupService {
   @Transactional
   public List<Reimbursement> getReimbursementsByGroupId(UUID groupId) {
     List<UserBalance> balances = getAllBalancesByGroupId(groupId);
+    return calculateReimbursements(balances);
+  }
+
+  @Transactional
+  public List<UserBalance> getBalancesByGroupIdAndCategory(UUID groupId, List<Category> categories) {
+    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories);
+  }
+
+  @Transactional
+  public List<Reimbursement> getReimbursementsByGroupIdAndCategory(UUID groupId,List<Category> categories) {
+    List<UserBalance> balances = getBalancesByGroupIdAndCategory(groupId,categories);
     return calculateReimbursements(balances);
   }
 

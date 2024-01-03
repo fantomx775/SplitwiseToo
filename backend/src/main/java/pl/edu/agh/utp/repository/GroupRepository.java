@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
+import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.model.nodes.User;
 import pl.edu.agh.utp.records.UserBalance;
@@ -26,6 +27,19 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
                   RETURN u as user, owesAmount - paidAmount AS balance
                   """)
   List<UserBalance> findAllBalancesByGroupId(@Param("groupId") UUID groupId);
+
+ @Query(
+          """
+          MATCH (user:User)-[r]->(transaction:Transaction)
+          MATCH (transaction)-[:IS_OF_CATEGORY]->(category:Category)
+          RETURN user.name,
+          sum(CASE WHEN type(r) = 'made_payment' THEN r.amount
+                WHEN type(r) = 'owes' THEN -r.amount
+           END) AS total WHERE category in $categories
+              """
+  )
+     List<UserBalance> findBalancesByGroupIdAndCategory(@Param("groupId") UUID groupId,@Param("category") List<Category> categories);
+
 
   @Query(
       "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS id, u.name  AS name, u.email AS email, u.password AS password")
