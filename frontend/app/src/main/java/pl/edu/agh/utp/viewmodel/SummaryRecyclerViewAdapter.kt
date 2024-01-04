@@ -9,6 +9,8 @@ import pl.edu.agh.utp.api.ApiObject
 
 import pl.edu.agh.utp.databinding.ItemSummaryBinding
 import pl.edu.agh.utp.model.Reimbursement
+import pl.edu.agh.utp.model.category.Category
+import pl.edu.agh.utp.model.transaction.SimpleTransaction
 import pl.edu.agh.utp.model.user.User
 import java.util.UUID
 import retrofit2.Call
@@ -87,4 +89,29 @@ class SummaryRecyclerViewAdapter( private val groupId: UUID
         })
     }
 
+    fun fetchReimbursementsByCategories(categories: List<Category>) {
+        Log.i("ReimbursementsByCategories", categories.toString())
+        apiService.getReimbursements(groupId, categories).enqueue(object : Callback<List<Reimbursement>> {
+            override fun onResponse(
+                call: Call<List<Reimbursement>>,
+                response: Response<List<Reimbursement>>
+            ) {
+                Log.i("ReimbursementsByCategories", categories.toString())
+                if (response.isSuccessful) {
+                    Log.i("ReimbursementsByCategories", "Success: ${response.body()}")
+                    val newReimbursements = response.body() ?: emptyList()
+                    reimbursements.clear()
+                    reimbursements.addAll(newReimbursements)
+                    notifyDataSetChanged()
+
+                } else {
+                    Log.e("ReimbursementsByCategories", "Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Reimbursement>>, t: Throwable) {
+                Log.e("ReimbursementsByCategories", "Error: ${t.message}")
+            }
+        })
+    }
 }

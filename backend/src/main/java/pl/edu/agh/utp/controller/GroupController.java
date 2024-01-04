@@ -50,7 +50,6 @@ public class GroupController {
     return groupService.getAllTransactionsByGroupId(groupId);
   }
 
-  // FIXME: WTF is this?
   @PostMapping("/{id}/transactions/categories")
   public List<SimpleTransaction> getTransactionsByGroupIdAndCategories(
       @PathVariable("id") UUID groupId, @RequestBody List<Category> categories) {
@@ -89,8 +88,15 @@ public class GroupController {
   @PostMapping("/{id}/reimbursements/categories")
   public List<ReimbursmentDTO> getReimbursementsByGroupIdAndCategories(
       @PathVariable("id") UUID groupId, @RequestBody List<Category> categories) {
+
     return groupService.getReimbursementsByGroupIdAndCategory(groupId,categories).stream()
             .map(ReimbursmentDTO::fromReimbursment)
             .toList();
+  }
+
+  @GetMapping("/{id}/categories")
+  public List<Category> getCategoriesByGroup(
+      @PathVariable("id") UUID groupId) {
+    return groupService.getCategoriesByGroupId(groupId);
   }
 }

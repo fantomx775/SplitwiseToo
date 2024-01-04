@@ -16,13 +16,12 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
       "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE g.id = $groupId RETURN t.id AS transactionId, t.description AS description, t.date AS date")
   List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
 
-  // FIXME : This query is not working maybe?? Please check
   @Query(
       """
                   MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
-                  OPTIONAL MATCH (u)-[o:OWES]->(d:Transaction)
-                  OPTIONAL MATCH (u)-[p:PAID]->(p:Transaction)
                   WHERE g.id = $groupId
+                  OPTIONAL MATCH ()-[o:OWES]->(u)
+                  OPTIONAL MATCH ()-[p:MADE_PAYMENT]->(u)
                   WITH u, COALESCE(SUM(o.amount), 0) AS owesAmount, COALESCE(SUM(p.amount), 0) AS paidAmount
                   RETURN u as user, owesAmount - paidAmount AS balance
                   """)
@@ -30,18 +29,23 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
 
  @Query(
           """
-          MATCH (user:User)-[r]->(transaction:Transaction)
-          MATCH (transaction)-[:IS_OF_CATEGORY]->(category:Category)
-          RETURN user.name,
-          sum(CASE WHEN type(r) = 'made_payment' THEN r.amount
-                WHEN type(r) = 'owes' THEN -r.amount
-           END) AS total WHERE category in $categories
-              """
+                    MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
+                        MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)-[:IS_OF_CATEGORY]->(c:Category)
+                        WHERE g.id = $groupId AND c.name IN $categories
+                        OPTIONAL MATCH (t)-[o:OWES]->(u)
+                        OPTIONAL MATCH (t)-[p:MADE_PAYMENT]->(u)
+                        WITH u, COALESCE(SUM(o.amount), 0) AS owesAmount, COALESCE(SUM(p.amount), 0) AS paidAmount
+                        RETURN u as user, owesAmount - paidAmount AS balance
+                  """
   )
-     List<UserBalance> findBalancesByGroupIdAndCategory(@Param("groupId") UUID groupId,@Param("category") List<Category> categories);
+     List<UserBalance> findBalancesByGroupIdAndCategory(@Param("groupId") UUID groupId,@Param("categories") List<String> categories);
 
 
   @Query(
       "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS id, u.name  AS name, u.email AS email, u.password AS password")
   List<User> findAllUsersByGroupId(@Param("groupId") UUID groupId);
+
+  @Query(
+      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction)-[:IS_OF_CATEGORY]->(c:Category) WHERE g.id = $groupId RETURN c.id AS id, c.name AS name")
+  List<Category> findCategoriesByGroupId(@Param("groupId") UUID groupId);
 }

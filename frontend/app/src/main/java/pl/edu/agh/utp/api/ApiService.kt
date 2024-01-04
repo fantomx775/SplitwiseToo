@@ -1,6 +1,7 @@
 package pl.edu.agh.utp.api
 
 import pl.edu.agh.utp.model.Reimbursement
+import pl.edu.agh.utp.model.category.Category
 import pl.edu.agh.utp.model.group.Group
 import pl.edu.agh.utp.model.group.GroupRequest
 import pl.edu.agh.utp.model.user.LoginRequest
@@ -14,7 +15,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.util.Locale.Category
 import java.util.UUID
 
 interface ApiService {
@@ -57,4 +57,7 @@ interface ApiService {
 
     @POST("groups/{id}/reimbursements/categories")
     fun getReimbursements(@Path("id") groupId: UUID,@Body category: List<Category>): Call<List<Reimbursement>>
+
+    @GET("groups/{id}/categories")
+    fun getCategoriesByGroup(@Path("id") groupId: UUID): Call<List<Category>>
 }

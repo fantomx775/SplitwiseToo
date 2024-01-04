@@ -95,12 +95,13 @@ public class GroupService {
 
   @Transactional
   public List<UserBalance> getBalancesByGroupIdAndCategory(UUID groupId, List<Category> categories) {
-    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories);
+    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories.stream().map(Category::getName).toList());
   }
 
   @Transactional
   public List<Reimbursement> getReimbursementsByGroupIdAndCategory(UUID groupId,List<Category> categories) {
     List<UserBalance> balances = getBalancesByGroupIdAndCategory(groupId,categories);
+    System.out.println(balances);
     return calculateReimbursements(balances);
   }
 
@@ -117,7 +118,8 @@ public class GroupService {
             .sorted(Comparator.comparing(UserBalance::balance))
             .collect(Collectors.toList());
     List<Reimbursement> reimbursements = new ArrayList<>();
-
+    System.out.println(negativeBalances);
+    System.out.println(positiveBalances.size());
     for (UserBalance negativeBalance : negativeBalances) {
       double currentNegativeBalanceValue = negativeBalance.balance();
       while (currentNegativeBalanceValue < 0) {
@@ -139,11 +141,15 @@ public class GroupService {
         }
       }
     }
+    System.out.println(reimbursements);
     return reimbursements;
   }
 
-  // FIXME: make this better
   public Optional<Group> findGroupById(UUID groupId) {
     return groupRepository.findById(groupId);
+  }
+
+  public List<Category> getCategoriesByGroupId(UUID groupId) {
+    return groupRepository.findCategoriesByGroupId(groupId);
   }
 }
