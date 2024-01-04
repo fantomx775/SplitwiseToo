@@ -94,13 +94,15 @@ public class GroupService {
   }
 
   @Transactional
-  public List<UserBalance> getBalancesByGroupIdAndCategory(UUID groupId, List<Category> categories) {
-    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories);
+  public List<UserBalance> getBalancesByGroupIdAndCategory(
+      UUID groupId, List<Category> categories) {
+    return groupRepository.findBalancesByGroupIdAndCategory(groupId, categories);
   }
 
   @Transactional
-  public List<Reimbursement> getReimbursementsByGroupIdAndCategory(UUID groupId,List<Category> categories) {
-    List<UserBalance> balances = getBalancesByGroupIdAndCategory(groupId,categories);
+  public List<Reimbursement> getReimbursementsByGroupIdAndCategory(
+      UUID groupId, List<Category> categories) {
+    List<UserBalance> balances = getBalancesByGroupIdAndCategory(groupId, categories);
     return calculateReimbursements(balances);
   }
 

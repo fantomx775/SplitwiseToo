@@ -3,7 +3,6 @@ package pl.edu.agh.utp.service;
 import io.vavr.control.Either;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
-import pl.edu.agh.utp.model.nodes.User;
 import pl.edu.agh.utp.model.relationships.Debt;
 import pl.edu.agh.utp.model.relationships.Payment;
 import pl.edu.agh.utp.records.request.TransactionRequest;
@@ -22,9 +20,7 @@ import pl.edu.agh.utp.repository.UserRepository;
 @Service
 @AllArgsConstructor
 public class TransactionService {
-
   private final TransactionRepository transactionRepository;
-
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
 
@@ -35,31 +31,26 @@ public class TransactionService {
   @Transactional
   public Either<String, Transaction> createTransactionFromRequest(
       TransactionRequest transactionRequest) {
-    Optional<Category> category = categoryRepository.findByName(transactionRequest.category());
-    if (category.isEmpty()) {
-      category = Optional.of(categoryRepository.save(new Category(transactionRequest.category())));
-    }
-    Optional<User> paymentUser = userRepository.findById(transactionRequest.paymentUserId());
+    var category = categoryRepository.findByName(transactionRequest.category());
+    var paymentUser = userRepository.findById(transactionRequest.paymentUserId());
     if (paymentUser.isEmpty()) {
       return Either.left("Payment user not found");
     }
+    var debtsUsers = userRepository.findAllById(transactionRequest.debtsUserIds());
 
-    List<User> debtsUsers = userRepository.findAllById(transactionRequest.debtsUserIds());
     if (debtsUsers.size() != transactionRequest.debtsUserIds().size()) {
       return Either.left("Debts users not found");
     }
 
-    Payment payment = new Payment(paymentUser.get(), transactionRequest.amount());
-
+    var payment = new Payment(paymentUser.get(), transactionRequest.amount());
     double amountToPay = getAmountToPay(transactionRequest);
+    var debts = debtsUsers.stream().map(user -> new Debt(user, amountToPay)).toList();
 
-    List<Debt> debts = debtsUsers.stream().map(user -> new Debt(user, amountToPay)).toList();
-
-    Transaction transaction =
+    var transaction =
         new Transaction(
             transactionRequest.description(),
             transactionRequest.date(),
-            category.get(),
+            category.orElse(categoryRepository.save(new Category(transactionRequest.category()))),
             payment,
             debts);
     return Either.right(transaction);

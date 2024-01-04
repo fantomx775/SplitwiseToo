@@ -28,18 +28,17 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
                   """)
   List<UserBalance> findAllBalancesByGroupId(@Param("groupId") UUID groupId);
 
- @Query(
-          """
+  @Query(
+      """
           MATCH (user:User)-[r]->(transaction:Transaction)
           MATCH (transaction)-[:IS_OF_CATEGORY]->(category:Category)
           RETURN user.name,
           sum(CASE WHEN type(r) = 'made_payment' THEN r.amount
                 WHEN type(r) = 'owes' THEN -r.amount
            END) AS total WHERE category in $categories
-              """
-  )
-     List<UserBalance> findBalancesByGroupIdAndCategory(@Param("groupId") UUID groupId,@Param("category") List<Category> categories);
-
+              """)
+  List<UserBalance> findBalancesByGroupIdAndCategory(
+      @Param("groupId") UUID groupId, @Param("category") List<Category> categories);
 
   @Query(
       "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS id, u.name  AS name, u.email AS email, u.password AS password")

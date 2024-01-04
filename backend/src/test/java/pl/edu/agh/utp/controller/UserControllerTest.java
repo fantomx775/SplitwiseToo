@@ -48,9 +48,8 @@ public class UserControllerTest {
     @Test
     @SneakyThrows
     public void shouldReturnOkForCorrectData() {
-      UUID userId = UUID.randomUUID();
-      List<SimpleGroup> groups =
-          Collections.singletonList(new SimpleGroup(UUID.randomUUID(), "group"));
+      var userId = UUID.randomUUID();
+      var groups = Collections.singletonList(new SimpleGroup(UUID.randomUUID(), "group"));
       given(userService.findGroupsByUserId(userId)).willReturn(groups);
 
       mockMvc
@@ -63,7 +62,8 @@ public class UserControllerTest {
   @Nested
   class CreateUser {
     @Test
-    public void shouldReturnOkForCorrectData() throws Exception {
+    @SneakyThrows
+    public void shouldReturnOkForCorrectData() {
       var request = new RegisterRequest("name", "email", "password");
       var user = new User("name", "email", "password");
       given(userService.createUser(request)).willReturn(Optional.of(user));
@@ -78,7 +78,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnConflictForExistingEmail() throws Exception {
+    @SneakyThrows
+    public void shouldReturnConflictForExistingEmail() {
       var request = new RegisterRequest("name", "email", "password");
       given(userService.createUser(request)).willReturn(Optional.empty());
 
@@ -94,7 +95,8 @@ public class UserControllerTest {
   @Nested
   class LoginUser {
     @Test
-    public void shouldReturnOkForCorrectData() throws Exception {
+    @SneakyThrows
+    public void shouldReturnOkForCorrectData() {
       var loginRequest = new LoginRequest("email", "password");
       var user = new User("name", "email", "password");
       given(userService.authenticateUser(loginRequest)).willReturn(Optional.of(user));
@@ -109,7 +111,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnNotFoundForNonExistingUser() throws Exception {
+    @SneakyThrows
+    public void shouldReturnNotFoundForNonExistingUser() {
       var loginRequest = new LoginRequest("email", "password");
       given(userService.authenticateUser(loginRequest)).willReturn(Optional.empty());
 
@@ -122,7 +125,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnUnauthorizedForInvalidPassword() throws Exception {
+    @SneakyThrows
+    public void shouldReturnUnauthorizedForInvalidPassword() {
       var loginRequest = new LoginRequest("email", "password");
       var exception = new InvalidPasswordException("Invalid password");
       given(userService.authenticateUser(loginRequest)).willThrow(exception);
