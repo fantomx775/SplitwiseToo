@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.agh.utp.R
+import pl.edu.agh.utp.view.SummaryFragment
 import pl.edu.agh.utp.view.transaction.AddTransactionFragment
 import pl.edu.agh.utp.view.transaction.TransactionDetailsFragment
 import pl.edu.agh.utp.viewmodel.TransactionsAdapter
@@ -33,9 +34,13 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
     ): View? {val view = inflater.inflate(R.layout.fragment_transactions, container, false)
 
         val btnAdd: Button = view.findViewById(R.id.add_transaction_button)
+        val btnSummary: Button = view.findViewById(R.id.summary_button)
 
         btnAdd.setOnClickListener {
             navigateToAddTransactionFragment()
+        }
+        btnSummary.setOnClickListener {
+            navigateToSummaryFragment()
         }
 
         recyclerView = view.findViewById(R.id.transactions_recycler_view)
@@ -61,6 +66,14 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
     }
     private fun navigateToTransactionDetailsFragment(transactionId: UUID) {
         val fragment = TransactionDetailsFragment(transactionId)
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun navigateToSummaryFragment() {
+        val fragment = SummaryFragment(groupId)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)

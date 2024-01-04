@@ -1,6 +1,6 @@
 package pl.edu.agh.utp.api
 
-import pl.edu.agh.utp.model.Reimbursment
+import pl.edu.agh.utp.model.Reimbursement
 import pl.edu.agh.utp.model.group.Group
 import pl.edu.agh.utp.model.group.GroupRequest
 import pl.edu.agh.utp.model.user.LoginRequest
@@ -50,11 +50,11 @@ interface ApiService {
     fun registerUser(@Body registerRequest: RegisterRequest): Call<User>
 
     @GET("/groups/{id}/reimbursements")
-    fun getReimbursements(@Path("id") groupId: UUID): Call<List<Reimbursment>>
+    fun getReimbursements(@Path("id") groupId: UUID): Call<List<Reimbursement>>
 
     @POST("/groups/{id}/transactions/categories")
     fun filterTransactionsByCategory(@Path("id") groupId: UUID, @Body category: List<Category>): Call<List<SimpleTransaction>>
 
     @POST("groups/{id}/reimbursements/categories")
-    fun getReimbursements(@Path("id") groupId: UUID,@Body category: List<Category>): Call<List<Reimbursment>>
+    fun getReimbursements(@Path("id") groupId: UUID,@Body category: List<Category>): Call<List<Reimbursement>>
 }
