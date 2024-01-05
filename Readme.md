@@ -13,22 +13,16 @@ Instrukcja:
 
 Change Log:
 
-1. Frontend
-    
-
-2. Backend
-    
-    
-3. Nie działa(ło):
-    - dodawanie nowej grupy (błąd z nazwą)
-    - dodwanie user'a do grupy (nie ma)
-    - dodwanie user'ów do transkacji (nie działa endpoint)
-4. Działa:
+1. Działa:
 	- logowanie i rejestracja
     - wyswietlanie grup zalogowanego usera
     - wyswietlanie wszystkich transakcji w grupie
     - wyswietlanie szczzegółów transakcji
-    !!!!ZMIANY!!!!
+    - !!!!ZMIANY!!!!
     - dodawanie nowej grupy 
     - dodwanie userów do grupy(podczas tworzenia nowej grupy)
     - dodwanie user'ów do transkacji
+    - !!!!M2!!!!
+    - filtrowanie transakcji po kategorii
+    - wyswietlanie widoku podsumowania(na razie tylko kto komu i ile jest winien, planujemy jeszcze wyświetlać saldo dla każdego użytkownika w grupie)
+    - filtrowanie podsumowania po kategorii
