@@ -12,7 +12,6 @@ import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.model.category.Category
-import pl.edu.agh.utp.view.placeholder.PlaceholderContent
 import pl.edu.agh.utp.viewmodel.CategoryFilterAdapter
 import java.util.UUID
 

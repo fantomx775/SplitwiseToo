@@ -19,12 +19,13 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
   // FIXME : This query is not working maybe?? Please check
   @Query(
       """
-                  MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
-                  OPTIONAL MATCH (u)-[o:OWES]->(d:Transaction)
-                  OPTIONAL MATCH (u)-[p:PAID]->(p:Transaction)
-                  WHERE g.id = $groupId
-                  WITH u, COALESCE(SUM(o.amount), 0) AS owesAmount, COALESCE(SUM(p.amount), 0) AS paidAmount
-                  RETURN u as user, owesAmount - paidAmount AS balance
+                   MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
+                   MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)
+                        WHERE g.id = $groupId
+                        OPTIONAL MATCH (t)-[o:OWES]->(u)
+                        OPTIONAL MATCH (t)-[p:MADE_PAYMENT]->(u)
+                        WITH u, COALESCE(SUM(o.amount), 0) AS owesAmount, COALESCE(SUM(p.amount), 0) AS paidAmount
+                        RETURN u as user, owesAmount - paidAmount AS balance
                   """)
   List<UserBalance> findAllBalancesByGroupId(@Param("groupId") UUID groupId);
 
