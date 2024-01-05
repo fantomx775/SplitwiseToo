@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.edu.agh.utp.R
 
 import pl.edu.agh.utp.api.ApiObject
+import pl.edu.agh.utp.model.category.Category
 import pl.edu.agh.utp.model.transaction.SimpleTransaction
 
 import retrofit2.Call
@@ -65,6 +66,32 @@ class TransactionsAdapter(private val groupId: UUID, private val clickListener: 
 
             override fun onFailure(call: Call<List<SimpleTransaction>>, t: Throwable) {
                 Log.e("Transactions", "Error: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchTransactionsByCategories(categories: List<Category>) {
+        Log.i("TransactionsByCategories", categories.toString())
+        apiService.filterTransactionsByCategory(groupId, categories).enqueue(object : Callback<List<SimpleTransaction>> {
+            override fun onResponse(
+                call: Call<List<SimpleTransaction>>,
+                response: Response<List<SimpleTransaction>>
+            ) {
+                Log.i("TransactionsByCategories", categories.toString())
+                if (response.isSuccessful) {
+                    Log.i("TransactionsByCategories", "Success: ${response.body()}")
+                    val newTransactions = response.body() ?: emptyList()
+                    transactions.clear()
+                    transactions.addAll(newTransactions)
+                    notifyDataSetChanged()
+
+                } else {
+                    Log.e("TransactionsByCategories", "Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<SimpleTransaction>>, t: Throwable) {
+                Log.e("TransactionsByCategories", "Error: ${t.message}")
             }
         })
     }

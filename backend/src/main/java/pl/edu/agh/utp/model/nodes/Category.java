@@ -8,7 +8,12 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 @Node
 @Data
+@RequiredArgsConstructor
 public class Category {
   @Id @GeneratedValue private UUID id;
-  private final String name;
+  private String name;
+
+  public Category(String name) {
+    this.name = name;
+  }
 }
