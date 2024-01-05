@@ -94,9 +94,8 @@ public class GroupService {
   }
 
   @Transactional
-  public List<UserBalance> getBalancesByGroupIdAndCategory(
-      UUID groupId, List<Category> categories) {
-    return groupRepository.findBalancesByGroupIdAndCategory(groupId, categories);
+  public List<UserBalance> getBalancesByGroupIdAndCategory(UUID groupId, List<Category> categories) {
+    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories.stream().map(Category::getName).toList());
   }
 
   @Transactional
@@ -144,8 +143,11 @@ public class GroupService {
     return reimbursements;
   }
 
-  // FIXME: make this better
   public Optional<Group> findGroupById(UUID groupId) {
     return groupRepository.findById(groupId);
+  }
+
+  public List<Category> getCategoriesByGroupId(UUID groupId) {
+    return groupRepository.findCategoriesByGroupId(groupId);
   }
 }

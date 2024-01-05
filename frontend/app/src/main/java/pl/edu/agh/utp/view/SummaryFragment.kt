@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.viewmodel.SummaryRecyclerViewAdapter
 import pl.edu.agh.utp.viewmodel.TransactionsAdapter
@@ -37,6 +38,11 @@ class SummaryFragment (private val groupId: UUID): Fragment() {
         savedInstanceState: Bundle?
     ): View? {val view = inflater.inflate(R.layout.fragment_summary, container, false)
 
+        val btnFilters: FloatingActionButton = view.findViewById(R.id.filters_button)
+
+        btnFilters.setOnClickListener {
+            showCategoryFilter()
+        }
 
         recyclerView = view.findViewById(R.id.summary_recycler_view)
         reimbursementAdapter = SummaryRecyclerViewAdapter(groupId)
@@ -50,5 +56,10 @@ class SummaryFragment (private val groupId: UUID): Fragment() {
     override fun onResume() {
         super.onResume()
         reimbursementAdapter.fetchReimburesments()
+    }
+
+    private fun showCategoryFilter() {
+        val categoryFilter = CategoryFilterFragment(groupId, reimbursementAdapter::fetchReimbursementsByCategories)
+        categoryFilter.show(requireActivity().supportFragmentManager, "CategoryFilter")
     }
 }

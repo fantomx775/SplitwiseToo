@@ -8,7 +8,9 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pl.edu.agh.utp.R
+import pl.edu.agh.utp.view.CategoryFilterFragment
 import pl.edu.agh.utp.view.SummaryFragment
 import pl.edu.agh.utp.view.transaction.AddTransactionFragment
 import pl.edu.agh.utp.view.transaction.TransactionDetailsFragment
@@ -35,12 +37,17 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
 
         val btnAdd: Button = view.findViewById(R.id.add_transaction_button)
         val btnSummary: Button = view.findViewById(R.id.summary_button)
+        val btnFilters: FloatingActionButton = view.findViewById(R.id.filters_button)
 
         btnAdd.setOnClickListener {
             navigateToAddTransactionFragment()
         }
         btnSummary.setOnClickListener {
             navigateToSummaryFragment()
+        }
+
+        btnFilters.setOnClickListener {
+            showCategoryFilter()
         }
 
         recyclerView = view.findViewById(R.id.transactions_recycler_view)
@@ -80,7 +87,8 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
         transaction.commit()
     }
 
-
-
-
+    private fun showCategoryFilter() {
+        val categoryFilter = CategoryFilterFragment(groupId, transactionsAdapter::fetchTransactionsByCategories)
+        categoryFilter.show(requireActivity().supportFragmentManager, "CategoryFilter")
+    }
 }
