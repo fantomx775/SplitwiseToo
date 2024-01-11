@@ -29,8 +29,8 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
                   """)
   List<UserBalance> findAllBalancesByGroupId(@Param("groupId") UUID groupId);
 
- @Query(
-          """
+  @Query(
+      """
                     MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
                         MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)-[:IS_OF_CATEGORY]->(c:Category)
                         WHERE g.id = $groupId AND c.name IN $categories
@@ -38,10 +38,9 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
                         OPTIONAL MATCH (t)-[p:MADE_PAYMENT]->(u)
                         WITH u, COALESCE(SUM(o.amount), 0) AS owesAmount, COALESCE(SUM(p.amount), 0) AS paidAmount
                         RETURN u as user, owesAmount - paidAmount AS balance
-                  """
-  )
-     List<UserBalance> findBalancesByGroupIdAndCategory(@Param("groupId") UUID groupId,@Param("categories") List<String> categories);
-
+                  """)
+  List<UserBalance> findBalancesByGroupIdAndCategory(
+      @Param("groupId") UUID groupId, @Param("categories") List<String> categories);
 
   @Query(
       "MATCH (g:Group)-[:CONTAINS_USER]->(u:User) WHERE g.id = $groupId RETURN u.id AS id, u.name  AS name, u.email AS email, u.password AS password")

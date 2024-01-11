@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Group;
-import pl.edu.agh.utp.records.dto.ReimbursmentDTO;
+import pl.edu.agh.utp.records.dto.ReimbursementDTO;
 import pl.edu.agh.utp.records.dto.TransactionDTO;
 import pl.edu.agh.utp.records.dto.UserDTO;
 import pl.edu.agh.utp.records.request.GroupRequest;
@@ -80,24 +80,23 @@ public class GroupController {
   }
 
   @GetMapping("/{id}/reimbursements")
-  public List<ReimbursmentDTO> getReimbursementsByGroupId(@PathVariable("id") UUID groupId) {
+  public List<ReimbursementDTO> getReimbursementsByGroupId(@PathVariable("id") UUID groupId) {
     return groupService.getReimbursementsByGroupId(groupId).stream()
-        .map(ReimbursmentDTO::fromReimbursment)
+        .map(ReimbursementDTO::fromReimbursement)
         .toList();
   }
 
   @PostMapping("/{id}/reimbursements/categories")
-  public List<ReimbursmentDTO> getReimbursementsByGroupIdAndCategories(
+  public List<ReimbursementDTO> getReimbursementsByGroupIdAndCategories(
       @PathVariable("id") UUID groupId, @RequestBody List<Category> categories) {
 
-    return groupService.getReimbursementsByGroupIdAndCategory(groupId,categories).stream()
-            .map(ReimbursmentDTO::fromReimbursment)
-            .toList();
+    return groupService.getReimbursementsByGroupIdAndCategory(groupId, categories).stream()
+        .map(ReimbursementDTO::fromReimbursement)
+        .toList();
   }
 
   @GetMapping("/{id}/categories")
-  public List<Category> getCategoriesByGroup(
-      @PathVariable("id") UUID groupId) {
+  public List<Category> getCategoriesByGroup(@PathVariable("id") UUID groupId) {
     return groupService.getCategoriesByGroupId(groupId);
   }
 }

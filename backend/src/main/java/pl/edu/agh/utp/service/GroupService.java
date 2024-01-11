@@ -2,7 +2,6 @@ package pl.edu.agh.utp.service;
 
 import io.vavr.control.Either;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +17,7 @@ import pl.edu.agh.utp.records.simple.SimpleGroup;
 import pl.edu.agh.utp.records.simple.SimpleTransaction;
 import pl.edu.agh.utp.repository.GroupRepository;
 import pl.edu.agh.utp.repository.UserRepository;
+import pl.edu.agh.utp.service.helpers.ReimbursementCalculator;
 
 @Service
 @AllArgsConstructor
@@ -90,57 +90,21 @@ public class GroupService {
   @Transactional
   public List<Reimbursement> getReimbursementsByGroupId(UUID groupId) {
     List<UserBalance> balances = getAllBalancesByGroupId(groupId);
-    return calculateReimbursements(balances);
+    return ReimbursementCalculator.calculateReimbursements(balances);
   }
 
   @Transactional
-  public List<UserBalance> getBalancesByGroupIdAndCategory(UUID groupId, List<Category> categories) {
-    return groupRepository.findBalancesByGroupIdAndCategory(groupId,categories.stream().map(Category::getName).toList());
+  public List<UserBalance> getBalancesByGroupIdAndCategory(
+      UUID groupId, List<Category> categories) {
+    return groupRepository.findBalancesByGroupIdAndCategory(
+        groupId, categories.stream().map(Category::getName).toList());
   }
 
   @Transactional
   public List<Reimbursement> getReimbursementsByGroupIdAndCategory(
       UUID groupId, List<Category> categories) {
     List<UserBalance> balances = getBalancesByGroupIdAndCategory(groupId, categories);
-    return calculateReimbursements(balances);
-  }
-
-  public static List<Reimbursement> calculateReimbursements(List<UserBalance> balances) {
-    // split for two lists with negative and positive balances
-    List<UserBalance> negativeBalances =
-        balances.stream()
-            .filter(balance -> balance.balance() <= 0)
-            .sorted(Comparator.comparing(UserBalance::balance))
-            .toList();
-    List<UserBalance> positiveBalances =
-        balances.stream()
-            .filter(balance -> balance.balance() > 0)
-            .sorted(Comparator.comparing(UserBalance::balance))
-            .collect(Collectors.toList());
-    List<Reimbursement> reimbursements = new ArrayList<>();
-
-    for (UserBalance negativeBalance : negativeBalances) {
-      double currentNegativeBalanceValue = negativeBalance.balance();
-      while (currentNegativeBalanceValue < 0) {
-        UserBalance positiveBalance = positiveBalances.get(0);
-        double positiveBalanceValue = positiveBalance.balance();
-        double debtValue = positiveBalanceValue + currentNegativeBalanceValue;
-        if (debtValue <= 0) {
-          reimbursements.add(
-              new Reimbursement(
-                  positiveBalance.user(), negativeBalance.user(), positiveBalanceValue));
-          positiveBalances.remove(0);
-          currentNegativeBalanceValue = debtValue;
-        } else {
-          reimbursements.add(
-              new Reimbursement(
-                  positiveBalance.user(), negativeBalance.user(), -currentNegativeBalanceValue));
-          positiveBalances.set(0, new UserBalance(positiveBalance.user(), debtValue));
-          currentNegativeBalanceValue = 0;
-        }
-      }
-    }
-    return reimbursements;
+    return ReimbursementCalculator.calculateReimbursements(balances);
   }
 
   public Optional<Group> findGroupById(UUID groupId) {
