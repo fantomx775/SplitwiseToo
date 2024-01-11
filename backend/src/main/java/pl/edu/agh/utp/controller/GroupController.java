@@ -50,24 +50,10 @@ public class GroupController {
     return groupService.getAllTransactionsByGroupId(groupId);
   }
 
-  // FIXME: WTF is this?
   @PostMapping("/{id}/transactions/categories")
   public List<SimpleTransaction> getTransactionsByGroupIdAndCategories(
       @PathVariable("id") UUID groupId, @RequestBody List<Category> categories) {
-    var transactions =
-        groupService
-            .findGroupById(groupId)
-            .map(Group::getTransactions)
-            .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Group not found"));
-
-    return transactions.stream()
-        .filter(transaction -> categories.contains(transaction.getCategory()))
-        .map(
-            transaction ->
-                new SimpleTransaction(
-                    transaction.getId(), transaction.getDescription(), transaction.getDate()))
-        .toList();
+    return groupService.getTransactionsByGroupIdAndCategories(groupId, categories);
   }
 
   @PostMapping("/{id}/transactions")

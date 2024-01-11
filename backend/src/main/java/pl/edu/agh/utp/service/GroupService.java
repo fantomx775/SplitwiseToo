@@ -114,4 +114,9 @@ public class GroupService {
   public List<Category> getCategoriesByGroupId(UUID groupId) {
     return groupRepository.findCategoriesByGroupId(groupId);
   }
+
+  public List<SimpleTransaction> getTransactionsByGroupIdAndCategories(UUID groupId, List<Category> categories) {
+          return groupRepository.findAllTransactionsByGroupIdAndCategories(groupId, categories.stream().map(Category::getName).toList());
+
+  }
 }
