@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.edu.agh.utp.model.nodes.Category;
-import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.records.dto.ReimbursementDTO;
 import pl.edu.agh.utp.records.dto.TransactionDTO;
 import pl.edu.agh.utp.records.dto.UserDTO;

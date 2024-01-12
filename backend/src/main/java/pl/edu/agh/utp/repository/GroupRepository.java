@@ -15,6 +15,7 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
   @Query(
       "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE g.id = $groupId RETURN t.id AS transactionId, t.description AS description, t.date AS date")
   List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
+
   @Query(
       """
                    MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
@@ -49,12 +50,12 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
   List<Category> findCategoriesByGroupId(@Param("groupId") UUID groupId);
 
   @Query(
-          """
+      """
                    MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
                        MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)-[:IS_OF_CATEGORY]->(c:Category)
                        WHERE g.id = $groupId AND c.name IN $categories
                        RETURN t.id as transactionId, t.description as description, t.date as date
-                 """
-  )
-  List<SimpleTransaction> findAllTransactionsByGroupIdAndCategories(@Param("groupId") UUID groupId,@Param("categories") List<String> categories);
+                 """)
+  List<SimpleTransaction> findAllTransactionsByGroupIdAndCategories(
+      @Param("groupId") UUID groupId, @Param("categories") List<String> categories);
 }
