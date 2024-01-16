@@ -24,24 +24,72 @@ class GraphActivity : AppCompatActivity() {
         // Ładuj kod Kotlin/JS do WebView
         val html = """
             <!DOCTYPE html>
-            <html>
-                <head>
-                    <title>Kotlin/JS in WebView</title>
-                    <script type="text/javascript" src="data:text/javascript;base64,${getJsCodeBase64()}"></script>
-                </head>
-                <body>
-                    <script type="text/javascript">
-                        document.getElementById("output").innerHTML = getHelloMessage();
-                    </script>
-                </body>
-            </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Visualization</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+    <div id="graph-container" style="height: 400px;"></div>
+
+    <script type="text/javascript">
+        // Przyjmuje macierz sąsiedztwa (0 - brak krawędzi, 1 - istnieje krawędź)
+        const adjacencyMatrix = [
+            [0, 1, 1, 0],
+            [1, 0, 1, 1],
+            [1, 1, 0, 1],
+            [0, 1, 1, 0]
+        ];
+
+        // Tworzy tablicę wierzchołków i krawędzi na podstawie macierzy sąsiedztwa
+       const nodes = new vis.DataSet([...Array(adjacencyMatrix.length)].map((_, i) => ({ id: i, label: "Node " + (i + 1).toString() })));
+        const edges = new vis.DataSet([]);
+
+        for (let i = 0; i < adjacencyMatrix.length; i++) {
+            for (let j = i + 1; j < adjacencyMatrix[i].length; j++) {
+                if (adjacencyMatrix[i][j] === 1) {
+                    edges.add({ from: i, to: j });
+                }
+            }
+        }
+
+        // Konfiguracja opcji dla grafu
+        const options = {
+            layout: {
+                hierarchical: false // Możesz dostosować układ w zależności od potrzeb
+            },
+            edges: {
+                color: "#000000"
+            },
+            nodes: {
+                color: {
+                    background: "#ffffff"
+                }
+            }
+        };
+
+        // Konfiguracja danych dla grafu
+        const data = {
+            nodes: nodes,
+            edges: edges
+        };
+
+        // Inicjalizuje obiekt network
+        const container = document.getElementById("graph-container");
+        const network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
+
         """
 
 
-//        webView.loadDataWithBaseURL("https://observablehq.com/@d3/disjoint-force-directed-graph/2?intent=fork")
-        webView.loadUrl("https://observablehq.com/@d3/disjoint-force-directed-graph/2?intent=fork")
-        }
+        webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "")
 
+
+        }
 private fun getJsCodeBase64(): String {
         val jsCode = """
             function getHelloMessage() {
