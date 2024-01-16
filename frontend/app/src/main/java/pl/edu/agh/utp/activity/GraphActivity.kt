@@ -23,62 +23,75 @@ class GraphActivity : AppCompatActivity() {
 
         // Ładuj kod Kotlin/JS do WebView
         val html = """
-            <!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Visualization</title>
+    <title>Interactive Graph</title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
-    <div id="graph-container" style="height: 400px;"></div>
+    <div id="graph-container" style="height: 100vh;"></div>
 
     <script type="text/javascript">
-        // Przyjmuje macierz sąsiedztwa (0 - brak krawędzi, 1 - istnieje krawędź)
-        const adjacencyMatrix = [
-            [0, 1, 1, 0],
-            [1, 0, 1, 1],
-            [1, 1, 0, 1],
-            [0, 1, 1, 0]
-        ];
+        var nodes = new vis.DataSet([
+          { id: 1, label: "Node 1" },
+          { id: 2, label: "Node 2" },
+          { id: 3, label: "Node 3" },
+          { id: 4, label: "Node 4" },
+          { id: 5, label: "Node 5" },
+        ]);
 
-        // Tworzy tablicę wierzchołków i krawędzi na podstawie macierzy sąsiedztwa
-       const nodes = new vis.DataSet([...Array(adjacencyMatrix.length)].map((_, i) => ({ id: i, label: "Node " + (i + 1).toString() })));
-        const edges = new vis.DataSet([]);
+        var edges = new vis.DataSet([
+          { from: 1, to: 2, label: 'Edge 1' },
+          { from: 2, to: 3, label: 'Edge 2' },
+          { from: 3, to: 4, label: 'Edge 3' },
+          { from: 4, to: 5, label: 'Edge 4' },
+        ]);
 
-        for (let i = 0; i < adjacencyMatrix.length; i++) {
-            for (let j = i + 1; j < adjacencyMatrix[i].length; j++) {
-                if (adjacencyMatrix[i][j] === 1) {
-                    edges.add({ from: i, to: j });
-                }
-            }
-        }
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
 
-        // Konfiguracja opcji dla grafu
-        const options = {
+        var options = {
             layout: {
-                hierarchical: false // Możesz dostosować układ w zależności od potrzeb
+                hierarchical: false
             },
             edges: {
+                arrows: {
+                    to: {
+                        enabled: true,
+                        scaleFactor: 0.8,
+                    }
+                },
+                font: {
+                    size: 30,
+                    align: "middle"
+                },
                 color: "#000000"
             },
             nodes: {
                 color: {
                     background: "#ffffff"
+                },
+                font: {
+                    size: 30
                 }
+            },
+            interaction: {
+                dragNodes: true,
+                dragView: true,
+                zoomView: true
+            },
+            physics: {
+                enabled: false
             }
         };
 
-        // Konfiguracja danych dla grafu
-        const data = {
-            nodes: nodes,
-            edges: edges
-        };
-
-        // Inicjalizuje obiekt network
-        const container = document.getElementById("graph-container");
-        const network = new vis.Network(container, data, options);
+        var container = document.getElementById("graph-container");
+        var network = new vis.Network(container, data, options);
     </script>
 </body>
 </html>
