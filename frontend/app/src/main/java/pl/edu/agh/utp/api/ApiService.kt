@@ -2,19 +2,21 @@ package pl.edu.agh.utp.api
 
 import pl.edu.agh.utp.model.Reimbursement
 import pl.edu.agh.utp.model.category.Category
+import pl.edu.agh.utp.model.graph.TransactionsGraph
 import pl.edu.agh.utp.model.group.Group
 import pl.edu.agh.utp.model.group.GroupRequest
-import pl.edu.agh.utp.model.user.LoginRequest
-import pl.edu.agh.utp.model.user.RegisterRequest
 import pl.edu.agh.utp.model.transaction.SimpleTransaction
 import pl.edu.agh.utp.model.transaction.Transaction
 import pl.edu.agh.utp.model.transaction.TransactionRequest
+import pl.edu.agh.utp.model.user.LoginRequest
+import pl.edu.agh.utp.model.user.RegisterRequest
 import pl.edu.agh.utp.model.user.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.UUID
 
 interface ApiService {
@@ -60,4 +62,10 @@ interface ApiService {
 
     @GET("groups/{id}/categories")
     fun getCategoriesByGroup(@Path("id") groupId: UUID): Call<List<Category>>
+
+    @GET("/{id}/graph")
+    fun getGraph(@Path("id") groupId: UUID, @Query("merge") merge: Boolean): Call<TransactionsGraph>
+
+    @GET("/{id}/graph/users")
+    fun getGraphWithUsers(@Path("id") groupId: UUID, @Body users: List<User>, @Query("merge") merge: Boolean): Call<TransactionsGraph>
 }

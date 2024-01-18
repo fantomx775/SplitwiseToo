@@ -18,8 +18,6 @@
         app:tint="@android:color/darker_gray"
         />
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/summary_recycler_view"
         android:layout_width="match_parent"
