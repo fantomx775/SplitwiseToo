@@ -1,13 +1,12 @@
-<!-- activity_graph.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.GraphActivity">
+    tools:context="view.GraphFragment">
 
     <WebView
         android:id="@+id/graphWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+</FrameLayout>

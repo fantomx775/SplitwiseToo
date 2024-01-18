@@ -167,7 +167,6 @@ class AddTransactionFragment(private val groupId: UUID) : Fragment() {
             people[user.userId] = PersonInfo(user.name, false)
             Log.i("AddTransactionFragment", "User: $user")
         }
-        people.remove(user?.userId)
     }
 
     private fun fetchGroupUsers(groupId: UUID) {

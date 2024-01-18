@@ -1,29 +1,59 @@
-package pl.edu.agh.utp.activity;
+package pl.edu.agh.utp.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.webkit.WebChromeClient
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
 import pl.edu.agh.utp.R
+import java.util.UUID
 
-class GraphActivity : AppCompatActivity() {
 
-@SuppressLint("SetJavaScriptEnabled")
+class GraphFragment (private val groupId: UUID) : Fragment() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_graph)
+        super.onCreate(savedInstanceState)
 
-            val webView = findViewById<WebView>(R.id.graphWebView)
 
-        // Włącz obsługę JavaScript w WebView
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_graph, container, false)
+
+        val webView = view.findViewById<WebView>(R.id.graphWebView)
         val webSettings: WebSettings = webView.settings
         webSettings.javaScriptEnabled = true
 
-        // Ładuj kod Kotlin/JS do WebView
-        val html = """
-       <!DOCTYPE html>
+        var nodes = """[
+            { id: 1, label: "Node 1" },
+            { id: 2, label: "Node 2" },
+            { id: 3, label: "Node 3" },
+            { id: 4, label: "Node 4" },
+            { id: 5, label: "Node 5" },
+        ]""";
+        var edges = """[
+            { from: 1, to: 2, label: 'Edge 1' },
+            { from: 2, to: 3, label: 'Edge 2' },
+            { from: 3, to: 4, label: 'Edge 3' },
+            { from: 4, to: 5, label: 'Edge 4' },
+        ]""";
+
+        webView.loadDataWithBaseURL("", getJSCode(nodes, edges), "text/html", "UTF-8", "")
+
+        return view
+    }
+
+    private fun getJSCode(nodes: String, edges: String): String {
+        return """
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,20 +65,9 @@ class GraphActivity : AppCompatActivity() {
     <div id="graph-container" style="height: 100vh;"></div>
 
     <script type="text/javascript">
-        var nodes = new vis.DataSet([
-          { id: 1, label: "Node 1" },
-          { id: 2, label: "Node 2" },
-          { id: 3, label: "Node 3" },
-          { id: 4, label: "Node 4" },
-          { id: 5, label: "Node 5" },
-        ]);
+       var nodes = new vis.DataSet($nodes);
 
-        var edges = new vis.DataSet([
-          { from: 1, to: 2, label: 'Edge 1' },
-          { from: 2, to: 3, label: 'Edge 2' },
-          { from: 3, to: 4, label: 'Edge 3' },
-          { from: 4, to: 5, label: 'Edge 4' },
-        ]);
+        var edges = new vis.DataSet($edges);
 
         var data = {
             nodes: nodes,
@@ -63,7 +82,7 @@ class GraphActivity : AppCompatActivity() {
                 arrows: {
                     to: {
                         enabled: true,
-                        scaleFactor: 0.8,
+                        scaleFactor: 1.0,
                     }
                 },
                 font: {
@@ -96,20 +115,8 @@ class GraphActivity : AppCompatActivity() {
 </body>
 </html>
 
-        """
-
-
-        webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "")
-
-
-        }
-private fun getJsCodeBase64(): String {
-        val jsCode = """
-            function getHelloMessage() {
-                return "nigger on the trigger";
-            }
         """.trimIndent()
 
-        return android.util.Base64.encodeToString(jsCode.toByteArray(), android.util.Base64.NO_WRAP)
-        }
-        }
+    }
+
+}

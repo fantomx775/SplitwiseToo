@@ -1,6 +1,7 @@
 package pl.edu.agh.utp.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +41,12 @@ class SummaryFragment (private val groupId: UUID): Fragment() {
 
         val btnFilters: FloatingActionButton = view.findViewById(R.id.filters_button)
 
+        val btnGraph: Button = view.findViewById(R.id.graph_button)
+
+        btnGraph.setOnClickListener {
+            navigateToGraphFragment()
+        }
+
         btnFilters.setOnClickListener {
             showCategoryFilter()
         }
@@ -62,4 +69,13 @@ class SummaryFragment (private val groupId: UUID): Fragment() {
         val categoryFilter = CategoryFilterFragment(groupId, reimbursementAdapter::fetchReimbursementsByCategories)
         categoryFilter.show(requireActivity().supportFragmentManager, "CategoryFilter")
     }
+
+    private fun navigateToGraphFragment() {
+        val fragment = GraphFragment(groupId)
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
 }

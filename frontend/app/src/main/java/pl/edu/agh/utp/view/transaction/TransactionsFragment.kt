@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pl.edu.agh.utp.R
 import pl.edu.agh.utp.view.CategoryFilterFragment
+import pl.edu.agh.utp.view.GraphFragment
 import pl.edu.agh.utp.view.SummaryFragment
 import pl.edu.agh.utp.view.transaction.AddTransactionFragment
 import pl.edu.agh.utp.view.transaction.TransactionDetailsFragment
@@ -86,6 +87,7 @@ class TransactionsFragment( private val groupId: UUID) : Fragment(),
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
 
     private fun showCategoryFilter() {
         val categoryFilter = CategoryFilterFragment(groupId, transactionsAdapter::fetchTransactionsByCategories)
