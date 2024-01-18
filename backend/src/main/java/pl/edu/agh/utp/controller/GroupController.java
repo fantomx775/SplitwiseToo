@@ -87,7 +87,12 @@ public class GroupController {
   }
 
   @GetMapping("/{id}/graph")
-  public TransactionsGraph getTransactionGraph(@PathVariable("id") UUID groupId, @RequestBody List<UserDTO> users, @RequestParam boolean merge) {
+  public TransactionsGraph getTransactionGraph(@PathVariable("id") UUID groupId, @RequestParam boolean merge) {
+    return groupService.getTransactionGraph(groupId, merge);
+  }
+
+  @GetMapping("/{id}/graph")
+  public TransactionsGraph getTransactionGraphWithUsers(@PathVariable("id") UUID groupId, @RequestBody List<UserDTO> users, @RequestParam boolean merge) {
     return groupService.getTransactionGraphWithUsers(groupId, users, merge);
   }
 

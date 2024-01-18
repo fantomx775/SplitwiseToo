@@ -14,7 +14,17 @@ public class GraphConstructor {
 
     private GraphConstructor() {}
 
-    public static TransactionsGraph constructGraph(List<UserDTO> users, List<TransactionDTO> transactions) {
+    public static TransactionsGraph constructGraph(List<UserDTO> users, List<TransactionDTO> transactions, boolean merge) {
+        TransactionsGraph graph;
+        if (merge) {
+            graph = constructGraphMerged(users, transactions);
+        } else {
+            graph = constructGraph(users, transactions);
+        }
+        return graph;
+    }
+
+    private static TransactionsGraph constructGraph(List<UserDTO> users, List<TransactionDTO> transactions) {
         List<TransactionsGraph.Vertex> vertices = new LinkedList<>();
         List<TransactionsGraph.Edge> edges = new LinkedList<>();
 
@@ -32,7 +42,7 @@ public class GraphConstructor {
         return new TransactionsGraph(vertices, edges);
     }
 
-    public static TransactionsGraph constructGraphMerged(List<UserDTO> users, List<TransactionDTO> transactions) {
+    private static TransactionsGraph constructGraphMerged(List<UserDTO> users, List<TransactionDTO> transactions) {
         List<TransactionsGraph.Vertex> vertices = new LinkedList<>();
         List<TransactionsGraph.Edge> edges = new LinkedList<>();
         HashMap<TransactionsGraph.Pair, Double> debts = new HashMap<>();

@@ -44,7 +44,7 @@ public class GroupService {
   }
 
   public List<SimpleTransaction> getAllTransactionsByGroupId(UUID groupId) {
-    return groupRepository.findAllTransactionsByGroupId(groupId);
+    return groupRepository.findAllTransactionsByGroupId(groupId).stream().map(SimpleTransaction::fromTransaction).toList();
   }
 
   public List<User> getAllUsersByGroupId(UUID groupId) {
@@ -125,14 +125,18 @@ public class GroupService {
         groupId, categories.stream().map(Category::getName).toList());
   }
 
+  public TransactionsGraph getTransactionGraph(UUID groupId, boolean merge) {
+    List<UserDTO> users = groupRepository.findAllUsersByGroupId(groupId)
+            .stream().map(UserDTO::fromUser).toList();
+    List<TransactionDTO> transactions = groupRepository.findAllTransactionsByGroupId(groupId)
+            .stream().map(TransactionDTO::fromTransaction).toList();
+    return GraphConstructor.constructGraph(users, transactions, merge);
+  }
+
   public TransactionsGraph getTransactionGraphWithUsers(UUID groupId, List<UserDTO> users, boolean merge) {
-    List<Transaction> transactions = groupRepository.findAllTransactionsByGroupIdAndUsers(groupId, users.stream().map(UserDTO::userId).toList());
-    TransactionsGraph graph;
-    if (merge) {
-      graph = GraphConstructor.constructGraphMerged(users, transactions.stream().map(TransactionDTO::fromTransaction).toList());
-    } else {
-      graph = GraphConstructor.constructGraph(users, transactions.stream().map(TransactionDTO::fromTransaction).toList());
-    }
-    return graph;
+    List<TransactionDTO> transactions = groupRepository.findAllTransactionsByGroupIdAndUsers(
+            groupId, users.stream().map(UserDTO::userId).toList())
+            .stream().map(TransactionDTO::fromTransaction).toList();
+    return GraphConstructor.constructGraph(users, transactions, merge);
   }
 }
