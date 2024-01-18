@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Group;
+import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.model.nodes.User;
 import pl.edu.agh.utp.records.UserBalance;
 import pl.edu.agh.utp.records.simple.SimpleTransaction;
@@ -58,4 +59,14 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
                  """)
   List<SimpleTransaction> findAllTransactionsByGroupIdAndCategories(
       @Param("groupId") UUID groupId, @Param("categories") List<String> categories);
+
+  @Query(
+    """
+      MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
+      WHERE u.id IN $userIds
+      MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)
+      RETURN t as transaction
+    """ // TODO: check if correct
+  )
+  List<Transaction> findAllTransactionsByGroupIdAndUsers(@Param("groupId") UUID groupId, @Param("userIds") List<UUID> users);
 }

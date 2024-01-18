@@ -9,14 +9,18 @@ import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Group;
 import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.model.nodes.User;
+import pl.edu.agh.utp.records.TransactionsGraph;
 import pl.edu.agh.utp.records.Reimbursement;
 import pl.edu.agh.utp.records.UserBalance;
+import pl.edu.agh.utp.records.dto.TransactionDTO;
+import pl.edu.agh.utp.records.dto.UserDTO;
 import pl.edu.agh.utp.records.request.GroupRequest;
 import pl.edu.agh.utp.records.request.TransactionRequest;
 import pl.edu.agh.utp.records.simple.SimpleGroup;
 import pl.edu.agh.utp.records.simple.SimpleTransaction;
 import pl.edu.agh.utp.repository.GroupRepository;
 import pl.edu.agh.utp.repository.UserRepository;
+import pl.edu.agh.utp.service.helpers.GraphConstructor;
 import pl.edu.agh.utp.service.helpers.ReimbursementCalculator;
 
 @Service
@@ -119,5 +123,16 @@ public class GroupService {
       UUID groupId, List<Category> categories) {
     return groupRepository.findAllTransactionsByGroupIdAndCategories(
         groupId, categories.stream().map(Category::getName).toList());
+  }
+
+  public TransactionsGraph getTransactionGraphWithUsers(UUID groupId, List<UserDTO> users, boolean merge) {
+    List<Transaction> transactions = groupRepository.findAllTransactionsByGroupIdAndUsers(groupId, users.stream().map(UserDTO::userId).toList());
+    TransactionsGraph graph;
+    if (merge) {
+      graph = GraphConstructor.constructGraphMerged(users, transactions.stream().map(TransactionDTO::fromTransaction).toList());
+    } else {
+      graph = GraphConstructor.constructGraph(users, transactions.stream().map(TransactionDTO::fromTransaction).toList());
+    }
+    return graph;
   }
 }

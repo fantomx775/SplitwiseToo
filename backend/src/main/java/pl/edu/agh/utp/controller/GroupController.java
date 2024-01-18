@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.edu.agh.utp.model.nodes.Category;
+import pl.edu.agh.utp.records.TransactionsGraph;
 import pl.edu.agh.utp.records.dto.ReimbursementDTO;
 import pl.edu.agh.utp.records.dto.TransactionDTO;
 import pl.edu.agh.utp.records.dto.UserDTO;
@@ -84,4 +85,10 @@ public class GroupController {
   public List<Category> getCategoriesByGroup(@PathVariable("id") UUID groupId) {
     return groupService.getCategoriesByGroupId(groupId);
   }
+
+  @GetMapping("/{id}/graph")
+  public TransactionsGraph getTransactionGraph(@PathVariable("id") UUID groupId, @RequestBody List<UserDTO> users, @RequestParam boolean merge) {
+    return groupService.getTransactionGraphWithUsers(groupId, users, merge);
+  }
+
 }
