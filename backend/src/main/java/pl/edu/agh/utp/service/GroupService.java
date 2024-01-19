@@ -44,7 +44,7 @@ public class GroupService {
   }
 
   public List<SimpleTransaction> getAllTransactionsByGroupId(UUID groupId) {
-    return groupRepository.findAllTransactionsByGroupId(groupId).stream().map(SimpleTransaction::fromTransaction).toList();
+    return groupRepository.findAllTransactionsByGroupId(groupId);
   }
 
   public List<User> getAllUsersByGroupId(UUID groupId) {
@@ -128,15 +128,30 @@ public class GroupService {
   public TransactionsGraph getTransactionGraph(UUID groupId, boolean merge) {
     List<UserDTO> users = groupRepository.findAllUsersByGroupId(groupId)
             .stream().map(UserDTO::fromUser).toList();
-    List<TransactionDTO> transactions = groupRepository.findAllTransactionsByGroupId(groupId)
-            .stream().map(TransactionDTO::fromTransaction).toList();
+    List<SimpleTransaction> simpleTransactions = groupRepository.findAllTransactionsByGroupId(groupId);
+    List<TransactionDTO> transactions = simpleTransactions.stream().map( transaction -> new TransactionDTO(
+            transaction.transactionId(),
+            transaction.description(),
+            transaction.date(),
+            null,
+            transactionService.getPaymentByTransactionId(transaction.transactionId()),
+            transactionService.getDebtsByTransactionId(transaction.transactionId())
+    )).toList();
+    System.out.println(transactions);
     return GraphConstructor.constructGraph(users, transactions, merge);
   }
 
   public TransactionsGraph getTransactionGraphWithUsers(UUID groupId, List<UserDTO> users, boolean merge) {
-    List<TransactionDTO> transactions = groupRepository.findAllTransactionsByGroupIdAndUsers(
-            groupId, users.stream().map(UserDTO::userId).toList())
-            .stream().map(TransactionDTO::fromTransaction).toList();
+    List<SimpleTransaction> simpleTransactions = groupRepository.findAllTransactionsByGroupIdAndUsers(
+            groupId, users.stream().map(UserDTO::userId).toList());
+    List<TransactionDTO> transactions = simpleTransactions.stream().map( transaction -> new TransactionDTO(
+            transaction.transactionId(),
+            transaction.description(),
+            transaction.date(),
+            null,
+            transactionService.getPaymentByTransactionId(transaction.transactionId()),
+            transactionService.getDebtsByTransactionId(transaction.transactionId())
+    )).toList();
     return GraphConstructor.constructGraph(users, transactions, merge);
   }
 }

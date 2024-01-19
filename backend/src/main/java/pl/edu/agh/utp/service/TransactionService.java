@@ -3,6 +3,7 @@ package pl.edu.agh.utp.service;
 import io.vavr.control.Either;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import pl.edu.agh.utp.model.nodes.Category;
 import pl.edu.agh.utp.model.nodes.Transaction;
 import pl.edu.agh.utp.model.relationships.Debt;
 import pl.edu.agh.utp.model.relationships.Payment;
+import pl.edu.agh.utp.records.dto.PaymentDTO;
 import pl.edu.agh.utp.records.request.TransactionRequest;
 import pl.edu.agh.utp.repository.CategoryRepository;
 import pl.edu.agh.utp.repository.TransactionRepository;
@@ -56,6 +58,14 @@ public class TransactionService {
     return Either.right(transaction);
   }
 
+  public PaymentDTO getPaymentByTransactionId(UUID transactionId) {
+    return transactionRepository.findPaymentByTransactionId(transactionId);
+  }
+
+  public List<PaymentDTO> getDebtsByTransactionId(UUID transactionId) {
+    return transactionRepository.findDebtsByTransactionId(transactionId);
+  }
+
   private double getAmountToPay(TransactionRequest transactionRequest) {
     var amount = transactionRequest.amount() / transactionRequest.debtsUserIds().size();
 
@@ -65,4 +75,5 @@ public class TransactionService {
   private double round(double value, int places) {
     return new BigDecimal(value).setScale(places, RoundingMode.DOWN).doubleValue();
   }
+
 }

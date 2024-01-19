@@ -13,9 +13,9 @@ import pl.edu.agh.utp.records.UserBalance;
 import pl.edu.agh.utp.records.simple.SimpleTransaction;
 
 public interface GroupRepository extends Neo4jRepository<Group, UUID> {
-//  @Query(
-//      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE g.id = $groupId RETURN t.id AS transactionId, t.description AS description, t.date AS date")
-//  List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
+  @Query(
+      "MATCH (g:Group)-[:CONTAINS_TRANSACTION]->(t:Transaction) WHERE g.id = $groupId RETURN t.id AS transactionId, t.description AS description, t.date AS date")
+  List<SimpleTransaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
 
   @Query(
       """
@@ -61,21 +61,12 @@ public interface GroupRepository extends Neo4jRepository<Group, UUID> {
       @Param("groupId") UUID groupId, @Param("categories") List<String> categories);
 
   @Query(
-          """
-            MATCH (g:Group)-[:CONTAINS_USER]->(User)
-            MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)
-            RETURN t as transaction
-          """ // TODO: check if correct
-  )
-  List<Transaction> findAllTransactionsByGroupId(@Param("groupId") UUID groupId);
-
-  @Query(
     """
       MATCH (g:Group)-[:CONTAINS_USER]->(u:User)
-      WHERE u.id IN $userIds
       MATCH (g)-[:CONTAINS_TRANSACTION]->(t:Transaction)
-      RETURN t as transaction
-    """ // TODO: check if correct
+      WHERE g.id = $groupId AND u.id IN $userIds
+      RETURN t.id AS transactionId, t.description AS description, t.date AS date
+    """
   )
-  List<Transaction> findAllTransactionsByGroupIdAndUsers(@Param("groupId") UUID groupId, @Param("userIds") List<UUID> users);
+  List<SimpleTransaction> findAllTransactionsByGroupIdAndUsers(@Param("groupId") UUID groupId, @Param("userIds") List<UUID> users);
 }
