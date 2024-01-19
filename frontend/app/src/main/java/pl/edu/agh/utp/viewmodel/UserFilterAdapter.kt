@@ -110,7 +110,7 @@ class UserFilterAdapter(private val groupId: UUID) : RecyclerView.Adapter<UserFi
     }
 
     fun getGraph(setGraph: (TransactionsGraph) -> Unit) {
-        apiService.getGraph(groupId, false).enqueue(object : Callback<TransactionsGraph> {
+        apiService.getGraph(groupId, true).enqueue(object : Callback<TransactionsGraph> {
             override fun onResponse(
                 call: Call<TransactionsGraph>,
                 response: Response<TransactionsGraph>

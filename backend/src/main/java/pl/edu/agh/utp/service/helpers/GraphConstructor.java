@@ -5,10 +5,7 @@ import pl.edu.agh.utp.records.dto.PaymentDTO;
 import pl.edu.agh.utp.records.dto.TransactionDTO;
 import pl.edu.agh.utp.records.dto.UserDTO;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GraphConstructor {
 
@@ -58,15 +55,27 @@ public class GraphConstructor {
                 debts.putIfAbsent(pair, 0d);
                 debts.put(pair, debts.get(pair) + debt.amount());
 
-                TransactionsGraph.Pair reversedPair = new TransactionsGraph.Pair(payment.user().userId(), debt.user().userId());
-                debts.putIfAbsent(reversedPair, 0d);
-                debts.put(pair, debts.get(pair) - debt.amount());
+//                TransactionsGraph.Pair reversedPair = new TransactionsGraph.Pair(payment.user().userId(), debt.user().userId());
+//                debts.putIfAbsent(reversedPair, 0d);
+//                debts.put(pair, debts.get(pair) - debt.amount());
             }
         }
 
         for (Map.Entry<TransactionsGraph.Pair, Double> debt : debts.entrySet()) {
-            if (debt.getValue() > 0) {
-                edges.add(new TransactionsGraph.Edge(debt.getKey().from(), debt.getKey().to(), debt.getValue()));
+            UUID from = debt.getKey().from();
+            UUID to = debt.getKey().to();
+            Double userDebt = debts.get(new TransactionsGraph.Pair(from, to));
+            Double otherUserDebt = debts.get(new TransactionsGraph.Pair(to, from));
+
+            if (otherUserDebt == null) {
+                edges.add(new TransactionsGraph.Edge(from, to, userDebt));
+                continue;
+            }
+
+            if (userDebt - otherUserDebt > 0) {
+                edges.add(new TransactionsGraph.Edge(from, to, userDebt - otherUserDebt));
+            } else if (otherUserDebt - userDebt > 0) {
+                edges.add(new TransactionsGraph.Edge(to, from, otherUserDebt - userDebt));
             }
         }
 
