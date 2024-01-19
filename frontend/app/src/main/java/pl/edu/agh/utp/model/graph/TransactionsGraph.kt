@@ -10,16 +10,14 @@ data class TransactionsGraph(val vertices: List<Vertex>, val edges: List<Edge>) 
 
     fun toNodesString(): String {
         val nodesList = vertices.map { vertex ->
-            "{ id: ${vertex.userId}, label: \"${vertex.username}\" }"
+            "{ id: '${vertex.userId}', label: '${vertex.username}' }"
         }
         return nodesList.joinToString(",\n", "[\n", "\n]")
     }
 
     fun toEdgesString(): String {
         val edgesList = edges.map { edge ->
-            "{ from: ${edge.from}, " +
-                    "to: ${edge.to}, " +
-                    "label: '${edge.value}' }"
+            "{ from: '${edge.from}', to: '${edge.to}', label: '${edge.value}' }"
         }
         return edgesList.joinToString(",\n", "[\n", "\n]")
     }

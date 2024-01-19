@@ -36,7 +36,7 @@ class GraphFragment (private val groupId: UUID) : Fragment() {
 
         val btnFilters: FloatingActionButton = view.findViewById(R.id.filters_button)
 
-        webView = view.findViewById<WebView>(R.id.graphWebView)
+        webView = view.findViewById(R.id.graphWebView)
         val webSettings: WebSettings = webView.settings
         webSettings.javaScriptEnabled = true
 
@@ -64,9 +64,9 @@ class GraphFragment (private val groupId: UUID) : Fragment() {
     }
 
     private fun setGraph(transactionsGraph: TransactionsGraph) {
-        var nodes = userFilterAdapter.transactionsGraph?.toNodesString()
-        var edges = userFilterAdapter.transactionsGraph?.toEdgesString()
-        webView.loadDataWithBaseURL("", getJSCode(nodes!!, edges!!), "text/html", "UTF-8", "")
+        val nodes = transactionsGraph.toNodesString()
+        val edges = transactionsGraph.toEdgesString()
+        webView.loadDataWithBaseURL("", getJSCode(nodes, edges), "text/html", "UTF-8", "")
 
     }
 

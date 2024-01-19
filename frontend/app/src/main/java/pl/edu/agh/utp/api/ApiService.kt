@@ -63,9 +63,9 @@ interface ApiService {
     @GET("groups/{id}/categories")
     fun getCategoriesByGroup(@Path("id") groupId: UUID): Call<List<Category>>
 
-    @GET("/{id}/graph")
+    @GET("groups/{id}/graph")
     fun getGraph(@Path("id") groupId: UUID, @Query("merge") merge: Boolean): Call<TransactionsGraph>
 
-    @GET("/{id}/graph/users")
+    @POST("groups/{id}/graph/users")
     fun getGraphWithUsers(@Path("id") groupId: UUID, @Body users: List<User>, @Query("merge") merge: Boolean): Call<TransactionsGraph>
 }
