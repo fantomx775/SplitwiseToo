@@ -7,6 +7,8 @@ Instrukcja:
  - hasła do kont:
    - n@agh.pl 1234
    - k@agh.pl 1234
+   - ak@agh.pl 1234
+   - m@agh.pl 1234
   
 
 
@@ -26,3 +28,4 @@ Change Log:
     - filtrowanie transakcji po kategorii
     - wyswietlanie widoku podsumowania(na razie tylko kto komu i ile jest winien, planujemy jeszcze wyświetlać saldo dla każdego użytkownika w grupie)
     - filtrowanie podsumowania po kategorii
+    - !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!WSZYSTKO DZIAŁA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
