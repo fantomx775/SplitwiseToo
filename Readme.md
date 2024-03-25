@@ -17,11 +17,6 @@
 - displaying a summary view
 - displaying expenses and owes as a graph
 
-#### Database credentials:
-- spring.neo4j.uri=neo4j+s://c2c86a8b.databases.neo4j.io
-- spring.neo4j.authentication.username=neo4j
-- spring.neo4j.authentication.password=BD1QLtPItyzdAIzFlodvYG1q3CAFsR-6Ibh_awdejCQ
-
 #### Authors:
 - Szczepan Rzeszutek
 - Karol Sewiło
